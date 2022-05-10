@@ -110,7 +110,7 @@ export default function MultipleSelectChip() {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 200 }} size="small">
+      <FormControl sx={{ m: 1, width: 200, marginTop: 3 }} size="small">
         <InputLabel id="demo-multiple-chip-label" sx={{ bgcolor:"white" }}>Category</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
@@ -139,7 +139,7 @@ export default function MultipleSelectChip() {
           ))}
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, width: 200 }} size="small">
+      <FormControl sx={{ m: 1, width: 200, marginTop: 3 }} size="small">
         <InputLabel id="demo-multiple-chip-label" sx={{ bgcolor:"white" }}>Location</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
@@ -168,7 +168,7 @@ export default function MultipleSelectChip() {
           ))}
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, width: 200 }} size="small">
+      <FormControl sx={{ m: 1, width: 200, marginTop: 3 }} size="small">
         <InputLabel id="demo-multiple-chip-label" sx={{ bgcolor:"white" }}>Date</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
@@ -197,7 +197,7 @@ export default function MultipleSelectChip() {
           ))}
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, width: 200 }} size="small">
+      <FormControl sx={{ m: 1, width: 200, marginTop: 3 }} size="small">
         <InputLabel id="demo-multiple-chip-label" sx={{ bgcolor:"white" }}>Time</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
