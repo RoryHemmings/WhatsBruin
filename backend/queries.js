@@ -11,14 +11,25 @@ const pool = new Pool({
 });
 
 /*FETCHING DATA*/
+
 const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+  pool.query('SELECT * FROM users ORDER BY userid ASC', (error, results) => {
     if (error) {
       throw error;
     }
     response.status(200).json(results.rows);
   })
 };
+const getEvents = (request, response) => {
+  pool.query('SELECT * FROM events ORDER BY eventid ASC', (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  })
+};
+
 module.exports = {
   getUsers,
+  getEvents
 };

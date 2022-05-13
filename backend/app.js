@@ -20,7 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res, next) => {
   res.json({'code': 200});
 });
+// do you want to have uid in url
 app.get('/user', db.getUsers);
+app.get('/event', db.getEvents);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
