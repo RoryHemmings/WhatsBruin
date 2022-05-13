@@ -6,6 +6,8 @@ import Home from './components/home/Home'
 import Calendar from './components/calendar/Calendar'
 import Search from './components/search/Search';
 import Profile from './components/profile/Profile';
+import Signup from './components/account/Signup';
+import Login from './components/account/Login';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/Search" element={<Search/>}></Route>
         <Route path="/Calendar" element={<Calendar/>}></Route>
         <Route path="/Profile" element={<Profile/>}></Route>
+        <Route path="/Signup" element={<Signup/>}></Route>
+        <Route path="/Login" element={<Login/>}></Route>
       </Routes>
     </div>
 
