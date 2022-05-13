@@ -39,21 +39,13 @@ const Navbar = () => {
     <AppBar sx={{backgroundColor: "#ffffff"}}position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ color:"cornflowerblue", mr: 2, display: { xs: 'none', md: 'flex' } }}
-          >
-            WhatsBruin
-          </Typography> */}
           <Toolbar>
           <Box
             component="img"
             sx={{
             height: 40,
             }}
-            alt="Your logo."
+            alt="What's Bruin Logo."
             src={require('./WhatsBruin.png')}
             
         >
