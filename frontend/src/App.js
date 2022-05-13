@@ -4,7 +4,7 @@ import {Route, Routes} from "react-router-dom"
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home'
 import Calendar from './components/calendar/Calendar'
-import Search from './components/search/Search';
+import Manager from './components/manager/Manager';
 import Profile from './components/profile/Profile';
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
       <Navbar/>
       <Routes>
       <Route path="/" element={<Home/>}></Route>
-        <Route path="/Search" element={<Search/>}></Route>
         <Route path="/Calendar" element={<Calendar/>}></Route>
+        <Route path="/Manager" element={<Manager/>}></Route>
         <Route path="/Profile" element={<Profile/>}></Route>
       </Routes>
     </div>
