@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
+const db = require('./queries');
 const app = express();
 
 // view engine setup
@@ -20,6 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res, next) => {
   res.json({'code': 200});
 });
+app.get('/user', db.getUser);
+app.get('/eventbytag', db.getEventsByTag);
+app.get('/event', db.getEvent);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
