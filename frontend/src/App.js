@@ -1,5 +1,8 @@
 import './App.css';
+import './components/calendar/Calendar.css';
 import React from 'react';
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import {Route, Routes} from "react-router-dom"
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home'
@@ -8,6 +11,8 @@ import Manager from './components/manager/Manager';
 import Profile from './components/profile/Profile';
 import Signup from './components/account/Signup';
 import Login from './components/account/Login';
+
+
 
 function App() {
   return (
