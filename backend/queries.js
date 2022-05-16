@@ -1,3 +1,5 @@
+const { query } = require('express');
+
 const Pool = require('pg').Pool;
 require('dotenv').config();
 console.log(process.env);
@@ -12,16 +14,21 @@ const pool = new Pool({
 
 /*FETCHING DATA*/
 
-const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY userid ASC', (error, results) => {
+const getUser = (request, response) => {
+  //how to get username
+  //const userid = request.body.userid;
+  const uid = request.query.uid;
+  pool.query(`SELECT * FROM users WHERE userid='${uid}'`, (error, results) => {
+    //console.log(results.rows);
     if (error) {
       throw error;
     }
     response.status(200).json(results.rows);
   })
 };
-const getEvents = (request, response) => {
-  pool.query('SELECT * FROM events ORDER BY eventid ASC', (error, results) => {
+const getEvent = (request, response) => {
+  const eid = request.query.eid;
+  pool.query(`SELECT * FROM events WHERE eventid='${eid}'`, (error, results) => {
     if (error) {
       throw error;
     }
@@ -29,7 +36,19 @@ const getEvents = (request, response) => {
   })
 };
 
+const getEventsByTag = (request, response) => {
+  var tags = request.query.tags;
+  const arr = tags.split(',');
+  pool.query(`SELECT * FROM events WHERE ARRAY[${arr}] && CAST(tags AS text[])`, (error, results) => {
+    if (error) {
+      throw error;
+    }
+      response.status(200).json(results.rows);
+  });
+};
+
 module.exports = {
-  getUsers,
-  getEvents
+  getUser,
+  getEvent,
+  getEventsByTag
 };
