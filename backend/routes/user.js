@@ -15,5 +15,6 @@ const getUser = (request, response) => {
       }
       response.status(200).json(results.rows);
     })
-  };
-  module.exports = router;
+};
+router.get('/', getUser);
+module.exports = router;

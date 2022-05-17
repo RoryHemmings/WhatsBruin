@@ -24,8 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res, next) => {
   res.json({'code': 200});
 });
-app.get('/user', userRouter);
-app.get('/event', eventRouter);
+app.use('/user', userRouter);
+app.use('/event', eventRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
