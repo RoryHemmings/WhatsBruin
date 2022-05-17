@@ -7,8 +7,8 @@ const db = require('../queries');
 const getUser = (request, response) => {
     //how to get username
     //const userid = request.body.userid;
-    const uid = request.query.uid;
-    db.query(`SELECT * FROM users WHERE userid='${uid}'`, (error, results) => {
+    const id = request.query.id;
+    db.query(`SELECT * FROM users WHERE id='${id}'`, (error, results) => {
       //console.log(results.rows);
       if (error) {
         throw error;
