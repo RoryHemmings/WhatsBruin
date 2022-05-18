@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res, next) => {
   res.json({'code': 200});
 });
+
 app.use('/user', userRouter);
 app.use('/event', eventRouter);
 app.use('/auth', authRouter);
