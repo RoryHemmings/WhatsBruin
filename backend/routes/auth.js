@@ -22,6 +22,12 @@ async function createNewUser(body, callback) {
 
   if (!checkEmailFormat(body.email))
     return callback({ status: 400, message: "Invalid email format" }, null);
+  
+  if (body.username.length < 4 || body.username.length > 32)
+    return callback({ status: 400, message: "Username must be between 4 and 32 characters long"}, null);
+  
+  if (body.password.length < 8 || body.password.length > 50)
+    return callback({ status: 400, message: "Password must be between 8 and 50 characters long"}, null);
 
   try {
     const passwordHash = await bcrypt.hash(body.password, 10);
@@ -46,15 +52,18 @@ router.post('/register', async (req, res, next) => {
     if (err) return next(err);
 
     db.query(
-      'SELECT * FROM users WHERE email=$1 LIMIT 1',
-      [user.email], (err, data) => {
+      'SELECT * FROM users WHERE email=$1 OR username=$2 LIMIT 1',
+      [user.email, user.username], (err, data) => {
         if (err) {
           console.log(err);
           return next({ status: 500, message: "database error" });
         }
 
         if (data.rows.length > 0) {
-          return next({ status: 400, message: `user with email ${user.email} already exists` });
+          if (data.rows[0].email === user.email)
+            return next({ status: 400, message: `user with email ${user.email} already exists` });
+          else
+            return next({ status: 400, message: `user with username ${user.username} already exists` });
         }
 
         db.query(
