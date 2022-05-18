@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../queries');
 const { v4: uuidv4 } = require('uuid');
 const getEvent = async (request, response) => {
-    const id = request.query.id;
+    const id = request.body.id;
     if(id == null){
         response.status(500).json({'database error': 'no query'});
         return;
@@ -18,14 +18,12 @@ const getEvent = async (request, response) => {
 };
   
 const getEventsByTag = async (request, response) => {
-    var tags = request.query.tags;
-    const arr = tags.split(',');
+    var tags = request.body.tags;
     if(tags == null){
         response.status(500).json({'database error': 'no query'});
         return;
     }
-    console.log(arr);
-    db.query(`SELECT * FROM events WHERE tags && $1`, [arr], (error, results) => {
+    db.query(`SELECT * FROM events WHERE tags && $1`, [tags], (error, results) => {
         if (error) {
             throw error;
         }
@@ -33,16 +31,17 @@ const getEventsByTag = async (request, response) => {
     });
 };
 const postCreateEvent = async (request, response) => {
+    //tags is already an array!
     let event = {
         id: uuidv4(),
-        title: request.query.title,
-        date: request.query.date,
-        time: request.query.time,
-        location: request.query.location,
-        organizer: request.query.organizer,
-        organizeruser: request.query.organizeruser,
-        tags: request.query.tags.split(','),
-        picture: request.query.picture,
+        title: request.body.title,
+        date: request.body.date,
+        time: request.body.time,
+        location: request.body.location,
+        organizer: request.body.organizer,
+        organizeruser: request.body.organizeruser,
+        tags: request.body.tags,
+        picture: request.body.picture,
         num_attendee: 0
     };
     db.query(`INSERT INTO events (id, title, date, time, location, organizer, organizeruser, tags, picture, num_attendee) 
@@ -62,8 +61,8 @@ const postCreateEvent = async (request, response) => {
 
 };
 const postDeleteEvent = async (request, response) => {
-    let eventid = request.query.eventid;
-    let userid = request.query.userid;
+    let eventid = request.body.eventid;
+    let userid = request.body.userid;
     db.query(`UPDATE users SET createdevents = ARRAY_REMOVE(createdevents, '${eventid}') WHERE id='${userid}' AND ('${eventid}' = ANY (createdevents))`, (error, results) => {
       if (error) {
         throw error;

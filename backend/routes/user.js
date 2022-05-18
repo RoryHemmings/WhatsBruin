@@ -8,7 +8,7 @@ const utils = require('../utils');
 const getUser = async (request, response) => {
     //how to get username
     //const userid = request.body.userid;
-    const id = request.query.id;
+    const id = request.body.id;
     if(id == null){
       response.status(500).json({'database error': 'no query'});
       return;
@@ -22,8 +22,8 @@ const getUser = async (request, response) => {
     });
 };
 const postAddEvent = async (request, response) => {
-  let eventid = request.query.eventid;
-  let userid = request.query.userid;
+  let eventid = request.body.eventid;
+  let userid = request.body.userid;
   db.query(`UPDATE users SET addedevents = ARRAY_APPEND(addedevents, '${eventid}') WHERE id='${userid}' AND NOT ('${eventid}' = ANY (addedevents))`, (error, results) => {
     if (error) {
       throw error;
@@ -33,8 +33,8 @@ const postAddEvent = async (request, response) => {
 
 };
 const postRemoveEvent = async (request, response) => {
-  let eventid = request.query.eventid;
-  let userid = request.query.userid;
+  let eventid = request.body.eventid;
+  let userid = request.body.userid;
   db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}') WHERE id='${userid}' AND ('${eventid}' = ANY (addedevents))`, (error, results) => {
     if (error) {
       throw error;
@@ -45,8 +45,8 @@ const postRemoveEvent = async (request, response) => {
 };
 
 const postAddLike = async (request, response) => {
-  let tagid = request.query.tagid;
-  let userid = request.query.userid;
+  let tagid = request.body.tagid;
+  let userid = request.body.userid;
   db.query(`UPDATE users SET likes = ARRAY_APPEND(likes, '${tagid}') WHERE id='${userid}' AND NOT ('${tagid}' = ANY (likes))`, (error, results) => {
     if (error) {
       throw error;
@@ -56,8 +56,8 @@ const postAddLike = async (request, response) => {
 
 };
 const postRemoveLike = async (request, response) => {
-  let tagid = request.query.tagid;
-  let userid = request.query.userid;
+  let tagid = request.body.tagid;
+  let userid = request.body.userid;
   db.query(`UPDATE users SET likes = ARRAY_REMOVE(likes, '${tagid}') WHERE id='${userid}' AND ('${tagid}' = ANY (likes))`, (error, results) => {
     if (error) {
       throw error;
