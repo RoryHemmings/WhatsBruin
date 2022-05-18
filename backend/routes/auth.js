@@ -87,7 +87,7 @@ passport.use(new LocalStrategy((email, password, callback) => {
 
       /* Make sure query was sucessful */
       if (err) return callback(err);
-      if (data.rows.length < 1) return callback(null, null, { message: `User that email does not exist` });
+      if (data.rows.length < 1) return callback(null, null, { message: `User with that email does not exist` });
 
       const user = data.rows[0];
       /* Confirm that password is correct */
