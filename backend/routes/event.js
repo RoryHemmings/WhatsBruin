@@ -53,7 +53,7 @@ const postCreateEvent = async (request, response) => {
         throw error;
       }
     });
-    db.query(`UPDATE users SET createdevents = ARRAY_APPEND(createdevents, '${event.id}') WHERE id='${event.organizer}' AND ('${event.id}' = ANY (createdevents))`, (error, results) => {
+    db.query(`UPDATE users SET createdevents = ARRAY_APPEND(createdevents, '${event.id}') WHERE id='${event.organizer}' AND NOT ('${event.id}' = ANY (createdevents))`, (error, results) => {
         if (error) {
           throw error;
         }
@@ -74,7 +74,7 @@ const postDeleteEvent = async (request, response) => {
           throw error;
         }
       });
-    db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}' WHERE ('${eventid}' = ANY (addedevents))`, (error, results) => {
+    db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}') WHERE ('${eventid}' = ANY (addedevents))`, (error, results) => {
         if (error) {
           throw error;
         }
