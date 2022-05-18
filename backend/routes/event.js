@@ -24,7 +24,8 @@ const getEventsByTag = async (request, response) => {
         response.status(500).json({'database error': 'no query'});
         return;
     }
-    db.query(`SELECT * FROM events WHERE ARRAY[${arr}] && CAST(tags AS text[])`, (error, results) => {
+    console.log(arr);
+    db.query(`SELECT * FROM events WHERE tags && $1`, [arr], (error, results) => {
         if (error) {
             throw error;
         }
@@ -51,19 +52,19 @@ const postCreateEvent = async (request, response) => {
       if (error) {
         throw error;
       }
-      response.status(201).send({ event: event });
     });
-    db.query(`UPDATE users SET createdevents = ARRAY_APPEND(createdevents, '${event.id}') WHERE id='${event.organizer}'`, (error, results) => {
+    db.query(`UPDATE users SET createdevents = ARRAY_APPEND(createdevents, '${event.id}') WHERE id='${event.organizer}' AND ('${event.id}' = ANY (createdevents))`, (error, results) => {
         if (error) {
           throw error;
         }
       });
+      response.status(201).send({ event: event });
 
 };
 const postDeleteEvent = async (request, response) => {
     let eventid = request.query.eventid;
     let userid = request.query.userid;
-    db.query(`UPDATE users SET createdevents = ARRAY_REMOVE(createdevents, '${eventid}') WHERE id='${userid}'`, (error, results) => {
+    db.query(`UPDATE users SET createdevents = ARRAY_REMOVE(createdevents, '${eventid}') WHERE id='${userid}' AND ('${eventid}' = ANY (createdevents))`, (error, results) => {
       if (error) {
         throw error;
       }
@@ -73,7 +74,12 @@ const postDeleteEvent = async (request, response) => {
           throw error;
         }
       });
-    
+    db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}' WHERE ('${eventid}' = ANY (addedevents))`, (error, results) => {
+        if (error) {
+          throw error;
+        }
+    });
+    response.status(201).send({response: 'removed'});
   };
 //router.get('/:id', (req, res) =>)
 router.post('/create', postCreateEvent);

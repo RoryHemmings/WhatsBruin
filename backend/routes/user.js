@@ -24,39 +24,46 @@ const getUser = async (request, response) => {
 const postAddEvent = async (request, response) => {
   let eventid = request.query.eventid;
   let userid = request.query.userid;
-  db.query(`UPDATE users SET addedevents = ARRAY_APPEND(addedevents, '${eventid}') WHERE id='${userid}'`, (error, results) => {
+  db.query(`UPDATE users SET addedevents = ARRAY_APPEND(addedevents, '${eventid}') WHERE id='${userid}' AND NOT ('${eventid}' = ANY (addedevents))`, (error, results) => {
     if (error) {
       throw error;
     }
   });
+  response.status(201).send({add: eventid});
+
 };
 const postRemoveEvent = async (request, response) => {
   let eventid = request.query.eventid;
   let userid = request.query.userid;
-  db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}') WHERE id='${userid}'`, (error, results) => {
+  db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}') WHERE id='${userid}' AND ('${eventid}' = ANY (addedevents))`, (error, results) => {
     if (error) {
       throw error;
     }
   });
+  response.status(201).send({remove: eventid});
+
 };
 
 const postAddLike = async (request, response) => {
   let tagid = request.query.tagid;
   let userid = request.query.userid;
-  db.query(`UPDATE users SET likes = ARRAY_APPEND(likes, '${tagid}') WHERE id='${userid}'`, (error, results) => {
+  db.query(`UPDATE users SET likes = ARRAY_APPEND(likes, '${tagid}') WHERE id='${userid}' AND NOT ('${tagid}' = ANY (likes))`, (error, results) => {
     if (error) {
       throw error;
     }
   });
+  response.status(201).send({add: tagid});
+
 };
 const postRemoveLike = async (request, response) => {
-  let eventid = request.query.eventid;
+  let tagid = request.query.tagid;
   let userid = request.query.userid;
-  db.query(`UPDATE users SET likes = ARRAY_REMOVE(likes, '${eventid}') WHERE id='${userid}'`, (error, results) => {
+  db.query(`UPDATE users SET likes = ARRAY_REMOVE(likes, '${tagid}') WHERE id='${userid}' AND ('${tagid}' = ANY (likes))`, (error, results) => {
     if (error) {
       throw error;
     }
   });
+  response.status(201).send({response: 'removed'});
   
 };
 
