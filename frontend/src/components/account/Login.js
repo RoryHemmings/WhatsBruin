@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +9,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { userContext } from '../../context/UserContext';
+import  { Navigate } from 'react-router-dom'
 
 
 export default function Login() {
@@ -24,7 +26,11 @@ export default function Login() {
   const [allValues, setAllValues] = useState(initialState); //hook to track value of each field
   const [isFormInvalid, setIsFormInvalid] = useState(initialError); //hook bool to track error state
   const [rerender, setRerender] = useState(false); //hook to force re-render if necessary
-  
+  const { user, setUser} = useContext(userContext);
+  if(user !== "none"){
+    return <Navigate to='/Profile'  />
+  }
+
   const changeHandler = e => {
     setAllValues({...allValues, [e.target.name]: e.target.value})
  };
