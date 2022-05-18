@@ -4,30 +4,12 @@ const db = require('../queries');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
+
 const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
-
-/* Authenticate the user */
-passport.use(new LocalStrategy((email, password, callback) => {
-  db.query(
-    'SELECT * FROM users WHERE email=(email), VALUES($1)', [email],
-    (err, user) => {
-
-      /* Make sure query was sucessful */
-      if (err) { return callback(err); }
-      if (!user) { return callback(null, false, { message: 'User does not exist' }); }
-
-      /* Confirm that password is correct */
-      const storedHash = user.passwordHash;
-      if (bcrypt.compare(password, storedHash)) {
-        return callback(null, user);  // success
-      } else {
-        return callback(null, false, { message: 'Incorrect password' })
-      }
-    });
-}));
 
 function checkEmailFormat(email) {
   // check if email has a valid format
@@ -35,7 +17,6 @@ function checkEmailFormat(email) {
 }
 
 async function createNewUser(body, callback) {
-  // TODO check for valid email, username, and password formatting
   if (!body.email || !body.username || !body.password)
     return callback({ status: 400, message: "Invalid email, username, or password" }, null);
 
@@ -61,11 +42,8 @@ async function createNewUser(body, callback) {
 }
 
 router.post('/register', async (req, res, next) => {
-  // TODO create user id, make sure user isn't already in the database
   createNewUser(req.body, (err, user) => {
-    if (err) {
-      return next(err);
-    }
+    if (err) return next(err);
 
     db.query(
       'SELECT * FROM users WHERE email=$1 LIMIT 1',
@@ -80,7 +58,7 @@ router.post('/register', async (req, res, next) => {
         }
 
         db.query(
-          'INSERT INTO users (id, email, username, passwordhash, events, createdevents, profile, settings, likes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+          'INSERT INTO users (id, email, username, passwordhash, addedevents, createdevents, profile, settings, likes) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
           [user.id, user.email, user.username, user.passwordHash, [], [], "", "", []],
           (err, data) => {
             if (err) {
@@ -94,25 +72,50 @@ router.post('/register', async (req, res, next) => {
             };
 
             // Created new user
-            res.status(201).send(ret);
+            res.status(201).send({ user: ret });
           });
       }
     );
   });
 });
 
+/* Authenticate the user */
+passport.use(new LocalStrategy((email, password, callback) => {
+  db.query(
+    'SELECT * FROM users WHERE email=$1 LIMIT 1', [email],
+    async (err, data) => {
+
+      /* Make sure query was sucessful */
+      if (err) return callback(err);
+      if (data.rows.length < 1) return callback(null, null, { message: `User that email does not exist` });
+
+      const user = data.rows[0];
+      /* Confirm that password is correct */
+      if (await bcrypt.compare(password, user.passwordhash)) {
+        return callback(null, user);  // success
+      } else {
+        return callback(null, null, { message: 'Incorrect password' })
+      }
+    });
+}));
+
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, message) => {
-    if (err) { return next(err); }
-    if (!user) {
-      res.json(message);
+    if (err) { 
+      console.log(err);
+      return next({status: 500, message: "authentication error"}); 
     }
 
-    console.log(user);
+    if (!user) return next({ status: 401, message: message });
 
-    // Create jwt
-    // return jwt
-    // probably res.cookie() to set cookie
+    const userInfo = {
+      userid: user.id,
+      username: user.username,
+      email: user.email,
+    }
+
+    const accessToken = jwt.sign(userInfo, process.env.JWT_ACCESS_SECRET, { expiresIn: '24h'});
+    res.status(200).json({ user: userInfo, accessToken: accessToken });
   })(req, res, next);
 });
 
