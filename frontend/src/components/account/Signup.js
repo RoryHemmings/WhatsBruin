@@ -1,5 +1,5 @@
 //import * as React from 'react';
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,21 +11,19 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { userContext } from '../../context/UserContext';
+import  { Navigate } from 'react-router-dom'
 
 const theme = createTheme();
 
 
 export default function SignUp() { //currently info just goes to console log on submit
   const initialState = {
-    firstName: '',
-    lastName: '',
     username: '',
     email: '',
     password: '',
   };
   const initialError = { //false = no error. true = error
-    firstName: false,
-    lastName: false,
     username: false,
     email: false,
     password: false,
@@ -33,25 +31,15 @@ export default function SignUp() { //currently info just goes to console log on 
   const [allValues, setAllValues] = useState(initialState); //hook to track value of each field
   const [isFormInvalid, setIsFormInvalid] = useState(initialError); //hook bool to track error state
   const [rerender, setRerender] = useState(false); //hook to force re-render if necessary
+  const { user} = useContext(userContext);
+  if(user !== "none"){
+    return <Navigate to='/Profile'  />
+  }
  const changeHandler = e => {
     setAllValues({...allValues, [e.target.name]: e.target.value})
  };
  const validate = e => { //set of if-else statements to validate.
     let isValid = true;
-    if(allValues.firstName === '') {
-      isFormInvalid.firstName = true;
-      isValid = false;
-    }
-    else{
-      isFormInvalid.firstName = false;
-    }
-    if(allValues.lastName === '') {
-      isFormInvalid.lastName = true;
-      isValid = false;
-    }
-    else{
-      isFormInvalid.lastName = false;
-    }
     if(allValues.username === '') {
       isFormInvalid.username = true;
       isValid = false;
@@ -59,7 +47,7 @@ export default function SignUp() { //currently info just goes to console log on 
     else{
       isFormInvalid.username = false;
     }
-    if(allValues.email === '') {
+    if(allValues.email === '' || allValues.email.includes("@") === false) {
       isFormInvalid.email = true;
       isValid = false;
     }
@@ -78,18 +66,35 @@ export default function SignUp() { //currently info just goes to console log on 
     }
     return false;
  };
-  const handleSubmit = (event) => { //currently just logs to console if valid,
+  const handleSubmit = async (event) => { //currently just logs to console if valid,
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(allValues.firstName);
     if(validate(event.currentTarget)){
     console.log({ //temporary. gonna send to backend instead
       email: data.get('email'),
       password: data.get('password'),
       username: data.get('username'),
-      firstname: data.get('firstName'),
-      lastname: data.get('lastName'),
     });
+    const information = {
+      email: data.get('email'),
+      password: data.get('password'),
+      username: data.get('username'),
+    }
+    let res = await fetch ("/auth/register", {
+      method:"POST",
+      body: information
+    })
+    const status = res.status
+    res = await res.json();
+    if(status === 201){ //do correct things
+      console.log("works");
+      alert("success! feel free to login with email: " + res.email);
+    }
+    else {
+      alert(res.message);
+      console.log("error stuff");
+    }
+
     setIsFormInvalid({...initialError});
     setAllValues({...initialState});
   }
@@ -120,35 +125,6 @@ export default function SignUp() { //currently info just goes to console log on 
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  value={allValues.firstName ?? ""} //FIXING THIS
-                  onChange={changeHandler}
-                  error={isFormInvalid.firstName}
-                  helperText={isFormInvalid.firstName? "Empty!" : " "} 
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  value={allValues.lastName ?? ""} //FIXING THIS
-                  onChange={changeHandler}
-                  error={isFormInvalid.lastName}
-                  helperText={isFormInvalid.lastName? "Empty!" : " "} 
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -157,10 +133,10 @@ export default function SignUp() { //currently info just goes to console log on 
                   label="Username"
                   name="username"
                   autoComplete="username"
-                  value={allValues.username ?? ""} //FIXING THIS
+                  value={allValues.username ?? ""}
                   onChange={changeHandler}
                   error={isFormInvalid.username}
-                  helperText={isFormInvalid.username? "Empty!" : " "} 
+                  helperText={isFormInvalid.username? "Invalid!" : " "} 
                 />
               </Grid>
               <Grid item xs={12}>
@@ -171,10 +147,10 @@ export default function SignUp() { //currently info just goes to console log on 
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  value={allValues.email ?? ""} //FIXING THIS
+                  value={allValues.email ?? ""} 
                   onChange={changeHandler}
                   error={isFormInvalid.email}
-                  helperText={isFormInvalid.email? "Empty!" : " "} 
+                  helperText={isFormInvalid.email? "Invalid!" : " "} 
                 />
               </Grid>
               <Grid item xs={12}>
@@ -186,10 +162,10 @@ export default function SignUp() { //currently info just goes to console log on 
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  value={allValues.password ?? ""} //FIXING THIS
+                  value={allValues.password ?? ""} 
                   onChange={changeHandler}
                   error={isFormInvalid.password}
-                  helperText={isFormInvalid.password? "Empty!" : " "} 
+                  helperText={isFormInvalid.password? "Invalid!" : " "} 
                 />
               </Grid>
             </Grid>
