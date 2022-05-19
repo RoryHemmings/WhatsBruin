@@ -89,8 +89,12 @@ router.post('/register', async (req, res, next) => {
 });
 
 /* Authenticate the user */
-passport.use(new LocalStrategy((email, password, callback) => {
-  db.query(
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  },
+  (email, password, callback) => {
+    db.query(
     'SELECT * FROM users WHERE email=$1 LIMIT 1', [email],
     async (err, data) => {
 
