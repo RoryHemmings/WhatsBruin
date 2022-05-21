@@ -29,6 +29,11 @@ const postAddEvent = async (request, response) => {
       throw error;
     }
   });
+  db.query(`UPDATE events SET num_attendee = num_attendee + 1 WHERE id='${eventid}'`, (error, results) => {
+    if (error) {
+      throw error;
+    }
+  });
   response.status(201).send({add: eventid});
 
 };
@@ -36,6 +41,11 @@ const postRemoveEvent = async (request, response) => {
   let eventid = request.body.eventid;
   let userid = request.body.userid;
   db.query(`UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, '${eventid}') WHERE id='${userid}' AND ('${eventid}' = ANY (addedevents))`, (error, results) => {
+    if (error) {
+      throw error;
+    }
+  });
+  db.query(`UPDATE events SET num_attendee = num_attendee - 1 WHERE id='${eventid}'`, (error, results) => {
     if (error) {
       throw error;
     }
@@ -73,12 +83,10 @@ router.post('/removeevent', postRemoveEvent);
 router.post('/addlike', postAddLike);
 router.post('/removelike', postRemoveLike);
 
+// router.post('/removelike', utils.authenticateToken, postRemoveLike);
 
-//event/tag id 54c5be59-325b-4be2-8f2f-afca235a2a74
-//user 8d6dc244-e2b4-4feb-9f80-9c1df5bfbdcb
-
-router.get('/private', utils.authenticateToken, (req, res) => {
-  res.status(200).json("private test");
-});
+// router.get('/private', utils.authenticateToken, (req, res) => {
+//   res.status(200).json("private test");
+// });
 
 module.exports = router;

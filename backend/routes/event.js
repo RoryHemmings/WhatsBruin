@@ -30,6 +30,22 @@ const getEventsByTag = async (request, response) => {
         response.status(200).json(results.rows);
     });
 };
+const getEventsByUser = async (request, response) => {
+  const id = request.body.id;
+  if(id == null){
+      response.status(500).json({'database error': 'no query'});
+      return;
+  }
+  db.query(`SELECT * FROM events WHERE organizer='${id}'`, (error, results) => {
+      if (error) {
+          console.log(error);
+          throw error;
+      }
+    response.status(200).json(results.rows);
+  })
+};
+
+
 const postCreateEvent = async (request, response) => {
     //tags is already an array!
     let event = {
@@ -80,9 +96,9 @@ const postDeleteEvent = async (request, response) => {
     });
     response.status(201).send({response: 'removed'});
   };
-//router.get('/:id', (req, res) =>)
 router.post('/create', postCreateEvent);
 router.post('/delete', postDeleteEvent);
 router.get('/', getEvent);
+router.get('/byUser', getEventsByUser);
 router.get('/tags', getEventsByTag);
 module.exports = router;
