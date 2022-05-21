@@ -1,5 +1,4 @@
-//import * as React from 'react';
-import React, { useState, useContext } from "react";
+import React, { useState} from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,8 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { userContext } from '../../context/UserContext';
 import  { Navigate } from 'react-router-dom'
+import { getWithExpiry } from "../../Token";
 
 const theme = createTheme();
 
@@ -31,14 +30,14 @@ export default function SignUp() { //currently info just goes to console log on 
   const [allValues, setAllValues] = useState(initialState); //hook to track value of each field
   const [isFormInvalid, setIsFormInvalid] = useState(initialError); //hook bool to track error state
   const [rerender, setRerender] = useState(false); //hook to force re-render if necessary
-  const { user} = useContext(userContext);
-  if(user !== "none"){
+  const user = getWithExpiry("user");
+  if(user !== null){
     return <Navigate to='/Profile'  />
   }
  const changeHandler = e => {
     setAllValues({...allValues, [e.target.name]: e.target.value})
  };
- const validate = e => { //set of if-else statements to validate.
+ const validate = e => { 
     let isValid = true;
     if(allValues.username === '') {
       isFormInvalid.username = true;
@@ -75,20 +74,24 @@ export default function SignUp() { //currently info just goes to console log on 
       password: data.get('password'),
       username: data.get('username'),
     });
-    const information = {
-      email: data.get('email'),
-      password: data.get('password'),
-      username: data.get('username'),
-    }
-    let res = await fetch ("/auth/register", {
+    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/auth/register", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       method:"POST",
-      body: information
+      body: JSON.stringify({
+        email: data.get('email'), 
+        password: data.get('password'), 
+        username: data.get('username'),
+      })
     })
     const status = res.status
     res = await res.json();
     if(status === 201){ //do correct things
       console.log("works");
-      alert("success! feel free to login with email: " + res.email);
+      console.log(res);
+      alert("success! feel free to login with email: " + res.user.email);
     }
     else {
       alert(res.message);
