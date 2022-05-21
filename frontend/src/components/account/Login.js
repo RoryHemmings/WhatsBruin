@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState} from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,8 +9,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { userContext } from '../../context/UserContext';
 import  { Navigate } from 'react-router-dom'
+import { getWithExpiry, setWithExpiry } from "../../Token";
 
 
 export default function Login() {
@@ -26,8 +26,8 @@ export default function Login() {
   const [allValues, setAllValues] = useState(initialState); //hook to track value of each field
   const [isFormInvalid, setIsFormInvalid] = useState(initialError); //hook bool to track error state
   const [rerender, setRerender] = useState(false); //hook to force re-render if necessary
-  const { user, setUser} = useContext(userContext);
-  if(user !== "none"){
+  const user = getWithExpiry("user");
+  if(user !== null){
     return <Navigate to='/Profile'  />
   }
 
@@ -56,15 +56,41 @@ export default function Login() {
   return false;
 };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log(allValues.firstName);
     if(validate(event.currentTarget)){
-    console.log({ //temporary. gonna send to backend instead
+    console.log({ //testing
       email: data.get('email'),
       password: data.get('password'),
     });
+    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/auth/login", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method:"POST",
+      body: JSON.stringify({
+        email: data.get('email'), 
+        password: data.get('password'),
+      })
+    })
+    const status = res.status;
+    console.log(res);
+    res = await res.json();
+    if(status === 200){ //do correct things
+      console.log("works");
+      console.log(res);
+      console.log(res.accessToken);
+      setWithExpiry("user", res.accessToken, 86400000); //24 hours in milliseconds
+      setRerender(!rerender);
+      <Navigate to='/Profile'  />
+    }
+    else {
+      alert(res.message);
+      console.log("error stuff");
+    }
     setIsFormInvalid({...initialError});
     setAllValues({...initialState});
   }

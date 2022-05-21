@@ -11,6 +11,7 @@ import Manager from './components/manager/Manager';
 import Profile from './components/profile/Profile';
 import Signup from './components/account/Signup';
 import Login from './components/account/Login';
+import Logout from './components/account/Logout';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/Profile" element={<Profile/>}></Route>
         <Route path="/Signup" element={<Signup/>}></Route>
         <Route path="/Login" element={<Login/>}></Route>
+        <Route path="/Logout" element={<Logout/>}></Route>
       </Routes>
     </div>
 

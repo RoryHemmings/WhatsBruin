@@ -12,23 +12,22 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {Link} from 'react-router-dom';
-import { userContext } from '../../context/UserContext';
-import { useContext } from 'react';
-
+import { getWithExpiry } from '../../Token';
 
 
 const Navbar = () => {
-  const { user} = useContext(userContext);
+  let userStruct = getWithExpiry("user");
   const pages = ['Calendar', 'Manager'];
   let settings = [];
   const unauth_settings = ['Signup', 'Login'];
   const auth_settings = ['Profile', 'Logout'];
-  if(user !== "none"){
+  if(userStruct !== null){
     settings = auth_settings;
   }
   else {
     settings = unauth_settings;
   }
+
   
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
