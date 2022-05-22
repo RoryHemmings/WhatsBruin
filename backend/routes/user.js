@@ -6,15 +6,12 @@ const utils = require('../utils');
 /*FETCHING DATA*/
 
 const getUser = async (request, response) => {
-    //how to get username
-    //const userid = request.body.userid;
-    const id = request.body.id;
+    const id = request.query.id;
     if(id == null){
       response.status(500).json({'database error': 'no query'});
       return;
     }
     db.query(`SELECT * FROM users WHERE id='${id}'`, (error, results) => {
-      //console.log(results.rows);
       if (error) {
         throw error;
       }
@@ -50,7 +47,7 @@ const postRemoveEvent = async (request, response) => {
       throw error;
     }
   });
-  response.status(201).send({remove: eventid});
+  response.status(200).send({remove: eventid});
 
 };
 
@@ -73,7 +70,7 @@ const postRemoveLike = async (request, response) => {
       throw error;
     }
   });
-  response.status(201).send({response: 'removed'});
+  response.status(200).send({response: 'removed'});
   
 };
 
