@@ -10,8 +10,8 @@ function getEvent(eventid) {
         if (err)
           reject(err);
 
-        resolve(data);
-      })
+        resolve(data.rows[0]);
+      });
   });
 }
 
@@ -20,7 +20,7 @@ const getUser = async (req, res) => {
   if (id == null)
     return res.status(400).json({ message: 'no user id provided' });
 
-  db.query('SELECT * FROM users WHERE id=$1', [id], (err, data) => {
+  db.query('SELECT * FROM users WHERE id=$1', [id], async (err, data) => {
     if (err) {
       console.log(err);
       return res.status(500).json({ message: 'database error' });
@@ -31,17 +31,17 @@ const getUser = async (req, res) => {
 
     let events = [];
     const eventids = data.rows[0].addedevents.concat(data.rows[0].createdevents);
-    eventids.forEach(async eventid => {
-      try {
-        events.push(await getEvent(eventid));
-      } catch (err) {
-        return res.status(500).json({message: 'invalid event id'});
-      }
-    });
+    try {
+      for (let i = 0; i < eventids.length; i++)
+        events.push(await getEvent(eventids[i]));
 
-    res.status(200).json({
-      events: events,
-    });
+      res.status(200).json({
+        events: events,
+      });
+    }
+    catch (err) {
+      return res.status(500).json({message: 'invalid event id'});
+    }
   });
 };
 
