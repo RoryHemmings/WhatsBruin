@@ -1,5 +1,4 @@
 const express = require('express');
-const { response } = require('../app');
 const router = express.Router();
 const db = require('../queries');
 const utils = require('../utils');
@@ -33,9 +32,24 @@ const getUser = async (req, res) => {
     let events = [];
     const eventids = data.rows[0].addedevents.concat(data.rows[0].createdevents);
     try {
-      for (let i = 0; i < eventids.length; i++)
+      for (let i = 0; i < eventids.length; i++){
         events.push(await getEvent(eventids[i]));
-
+      }
+      events.sort((a,b) => {
+        if(a.date == b.date){
+          if(a.time > b.time){
+            return 1;
+          }
+          if(a.time < b.time){
+            return -1;
+          }
+          return 0;
+        }  
+        if(a.date < b.date)
+              return -1;
+        if(a.date > b.date)
+            return 1;
+      });
       res.status(200).json({
         events: events,
       });
