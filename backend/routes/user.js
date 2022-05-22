@@ -103,11 +103,10 @@ router.post('/removeevent', postRemoveEvent);
 router.post('/addlike', postAddLike);
 router.post('/removelike', postRemoveLike);
 
-//event/tag id 54c5be59-325b-4be2-8f2f-afca235a2a74
-//user 8d6dc244-e2b4-4feb-9f80-9c1df5bfbdcb
+// router.post('/removelike', utils.authenticateToken, postRemoveLike);
 
-router.get('/private', utils.authenticateToken, (req, res) => {
-  res.status(200).json("private test");
-});
+// router.get('/private', utils.authenticateToken, (req, res) => {
+//   res.status(200).json("private test");
+// });
 
 module.exports = router;
