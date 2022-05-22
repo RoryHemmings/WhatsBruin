@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../queries');
 const { v4: uuidv4 } = require('uuid');
+
 const getEvent = async (request, response) => {
     const id = request.body.id;
     if(id == null){
@@ -30,6 +31,7 @@ const getEventsByTag = async (request, response) => {
         response.status(200).json(results.rows);
     });
 };
+
 const postCreateEvent = async (request, response) => {
     //tags is already an array!
     let event = {
@@ -60,6 +62,7 @@ const postCreateEvent = async (request, response) => {
       response.status(201).send({ event: event });
 
 };
+
 const postDeleteEvent = async (request, response) => {
     let eventid = request.body.eventid;
     let userid = request.body.userid;
@@ -80,6 +83,7 @@ const postDeleteEvent = async (request, response) => {
     });
     response.status(201).send({response: 'removed'});
   };
+
 //router.get('/:id', (req, res) =>)
 router.post('/create', postCreateEvent);
 router.post('/delete', postDeleteEvent);
