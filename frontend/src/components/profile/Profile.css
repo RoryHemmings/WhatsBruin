@@ -1,0 +1,99 @@
+/* .profile-top {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+} */
+
+*  { 
+    margin: 0; 
+    padding: 0; 
+    border: 0; 
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+}
+
+.italics {
+    font-style: italic;
+}
+
+.orange {
+    color: #F68C3E;
+}
+
+h1 { 
+    font-size: 3em;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: normal;
+}
+
+h3 {
+    font-weight: lighter;
+}
+
+button {
+    float: right;
+}
+
+.profile-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin-top: 2em;
+}
+
+img {
+    margin-right: 4em;
+}
+
+#profile-description {
+    font-size: 1.5em;
+    font-weight: normal;
+    text-align: left;
+}
+
+.profile-events {
+    margin: 2em 7em;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    border-radius: 15px;
+    border: 3px solid #FCBA63;
+    padding: 2em;
+    box-shadow: 8px 8px #ffdcaf;
+    margin-top: 1.5em;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: right;
+}
+
+#edit-button {
+    background-color: #b0d7ff;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+
+#delete-button {
+    margin-top: 0.5em;
+    background-color: #ffbdbd;
+    border-radius: 5px;
+    padding: 0.5em;
+}

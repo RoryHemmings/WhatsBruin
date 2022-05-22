@@ -1,5 +1,4 @@
 import './App.css';
-import './components/calendar/Calendar.css';
 import React from 'react';
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
