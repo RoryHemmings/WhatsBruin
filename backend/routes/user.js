@@ -10,13 +10,14 @@ function getEvent(eventid) {
         if (err)
           reject(err);
 
-        resolve(data.rows[0]);
+        const event = data.rows[0];
+        resolve(event);
       });
   });
 }
 
 const getUser = async (req, res) => {
-  const id = req.body.userid;
+  const id = req.query.userid;
   if (id == null)
     return res.status(400).json({ message: 'no user id provided' });
 
