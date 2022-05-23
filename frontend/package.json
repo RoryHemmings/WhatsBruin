@@ -24,8 +24,11 @@
     "react": "^18.1.0",
     "react-big-calendar": "^0.40.1",
     "react-dom": "^18.1.0",
+    "react-native": "^0.68.2",
+    "react-popup": "^0.11.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "reactjs-popup": "^2.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
