@@ -1,87 +1,76 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./Profile.css";
 import sampleImage from "./logo192.png";
+import { getWithExpiry } from "../../Token";
+import jwt_decode from "jwt-decode";
+import { Navigate } from "react-router-dom";
+
 
 const Profile = () => {
+const [events, setEvents] = useState([]);
+const userInfo = jwt_decode(getWithExpiry("user"));
+useEffect (() => {
+  let user = getWithExpiry("user");
+  let userInfo = jwt_decode(user);
+  if(userInfo === null){
+    return <Navigate to='/Signup'/>
+  }
+  const getData = async () => {
+    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user?userid=" + userInfo.userid, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization' : 'Bearer ' + user,
+    },
+      method:"GET",
+    })
+    const status = res.status;
+    res = await res.json();
+    if(status < 400) {
+      return res.events;
+    }
+    else {
+      console.log("error stuff");
+    }
+    setEvents(res.events);
+    console.log("hi");
+  }
+  getData().then(events => {
+    console.log(events); setEvents(events)})
+}, [])
+
+
   return (
     <div className="App">
-      <div class="profile-top">
+      <div className="profile-top">
         <div>
           <img src={sampleImage} alt="sample" />
         </div>
         <div>
-          <h1 id="profile-name">Organization Name</h1>
-          <h3 id="profile-description">organization description</h3>
+          <h1 id="profile-name">{userInfo.username}</h1>
+          <h3 id="profile-description">{userInfo.email}</h3>
           <br />
-          <h2 class="italics" id="profile-description">
+          {/* <h2 class="italics" id="profile-description">
             123 past events | 5 upcoming events
-          </h2>
+          </h2> */}
         </div>
       </div>
-      <div class="profile-events">
-        <h1 class="orange">My Upcoming Events</h1>
-        <div class="cards">
-          <div class="card">
-            <div>
-              <h2>Event 1 Name</h2>
-              <h3>Date</h3>
-              <h3>Time</h3>
-              <h3>Description</h3>
-            </div>
-            <div class="buttons">
-              <button id="edit-button">Edit Event</button>
-              <button id="delete-button">Delete Event</button>
-            </div>
+      <div className="profile-events">
+        <h1 className="orange">My Upcoming Events</h1>
+        <div className="cards">
+          {events?.map(event => {      
+            return (
+              <div className="card" key={event.id}>
+                <div>
+                  <h2>{event.title}</h2>
+                  <h3>{event.date}</h3>
+                  <h3>{event.starttime} - {event.endtime}</h3>
+                  <h3>{event.description}</h3>
+                </div>
+              </div>
+            );
+          })}
           </div>
-          <div class="card">
-            <div>
-              <h2>Event 2 Name</h2>
-              <h3>Date</h3>
-              <h3>Time</h3>
-              <h3>Description</h3>
-            </div>
-            <div class="buttons">
-              <button id="edit-button">Edit Event</button>
-              <button id="delete-button">Delete Event</button>
-            </div>
-          </div>
-          <div class="card">
-            <div>
-              <h2>Event 3 Name</h2>
-              <h3>Date</h3>
-              <h3>Time</h3>
-              <h3>Description</h3>
-            </div>
-            <div class="buttons">
-              <button id="edit-button">Edit Event</button>
-              <button id="delete-button">Delete Event</button>
-            </div>
-          </div>
-          <div class="card">
-            <div>
-              <h2>Event 4 Name</h2>
-              <h3>Date</h3>
-              <h3>Time</h3>
-              <h3>Description</h3>
-            </div>
-            <div class="buttons">
-              <button id="edit-button">Edit Event</button>
-              <button id="delete-button">Delete Event</button>
-            </div>
-          </div>
-          <div class="card">
-            <div>
-              <h2>Event 5 Name</h2>
-              <h3>Date</h3>
-              <h3>Time</h3>
-              <h3>Description</h3>
-            </div>
-            <div class="buttons">
-              <button id="edit-button">Edit Event</button>
-              <button id="delete-button">Delete Event</button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
