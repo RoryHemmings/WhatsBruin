@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import AddEvent from "./AddEvent";
+import CreateEvent from "./CreateEvent";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,13 +54,13 @@ function BasicTabs() {
           centered
           sx={{ marginTop: 2 }}
         >
-          <Tab label="➕ add event" {...a11yProps(0)} />
+          <Tab label="➕ create event" {...a11yProps(0)} />
           <Tab label="✏️ edit event" {...a11yProps(1)} />
           <Tab label="🗑 delete event" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0} component="form">
-        <AddEvent />
+        <CreateEvent />
       </TabPanel>
 
       {/* TODO: connect with backend */}

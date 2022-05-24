@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,7 +7,7 @@ import { getWithExpiry } from "../../Token";
 import Grid from "@mui/material/Grid";
 import jwt_decode from "jwt-decode";
 
-export default function AddEvent() {
+export default function CreateEvent() {
   const initialState = {
     eventName: "",
     date: "",
@@ -192,7 +192,7 @@ export default function AddEvent() {
           label="Event Name"
           name="eventName"
           variant="standard"
-          sx={{ width: 600, marginTop: 2, marginBottom: 2 }}
+          sx={{ width: 600, marginTop: 1, marginBottom: 1 }}
           required
           value={allValues.eventName ?? ""}
           onChange={changeHandler}
@@ -207,7 +207,7 @@ export default function AddEvent() {
           label="Date"
           name="date"
           type="date"
-          sx={{ width: 220, marginTop: 5 }}
+          sx={{ width: 220, marginTop: 4 }}
           InputLabelProps={{ shrink: true }}
           required
           value={allValues.date ?? ""}
@@ -227,7 +227,7 @@ export default function AddEvent() {
           inputProps={{
             step: 300, // 5 min
           }}
-          sx={{ width: 150, marginTop: 5, marginLeft: 5, marginRight: 5 }}
+          sx={{ width: 150, marginTop: 4, marginLeft: 5, marginRight: 5 }}
           required
           value={allValues.startTime ?? ""}
           onChange={changeHandler}
@@ -246,7 +246,7 @@ export default function AddEvent() {
           inputProps={{
             step: 300, // 5 min
           }}
-          sx={{ width: 150, marginTop: 5, marginBottom: 3 }}
+          sx={{ width: 150, marginTop: 4, marginBottom: 2 }}
           required
           value={allValues.endTime ?? ""}
           onChange={changeHandler}
@@ -266,7 +266,7 @@ export default function AddEvent() {
           onChange={changeHandler}
           error={isFormInvalid.selectCategory}
           helperText={isFormInvalid.selectCategory ? "Invalid!" : " "}
-          sx={{ m: 3, width: "28ch", marginBottom: 6 }}
+          sx={{ m: 3, width: "28ch", marginBottom: 5 }}
         >
           {categories.map((option) => (
             <MenuItem key={option} value={option}>
@@ -284,7 +284,7 @@ export default function AddEvent() {
           onChange={changeHandler}
           error={isFormInvalid.selectLocation}
           helperText={isFormInvalid.selectLocation ? "Invalid!" : " "}
-          sx={{ m: 3, width: "28ch", marginBottom: 6 }}
+          sx={{ m: 3, width: "28ch", marginBottom: 5 }}
         >
           {locations.map((option) => (
             <MenuItem key={option} value={option}>
@@ -319,7 +319,7 @@ export default function AddEvent() {
           variant="contained"
           type="submit"
           sx={{
-            marginTop: 5,
+            marginTop: 4,
             bgcolor: "#FCBA63",
             color: "#022A68",
             fontWeight: "bold",
