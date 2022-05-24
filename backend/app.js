@@ -11,6 +11,7 @@ const app = express();
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const eventRouter = require('./routes/event');
+const homeRouter = require('./routes/home');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -27,6 +28,7 @@ app.get('/', (req, res, next) => {
   res.json({'code': 200});
 });
 
+app.use('/home', homeRouter);
 app.use('/user', userRouter);
 app.use('/event', eventRouter);
 app.use('/auth', authRouter);

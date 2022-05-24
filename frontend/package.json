@@ -22,6 +22,7 @@
     "mongodb": "^2.2.36",
     "mongoskin": "^2.1.0",
     "node-calendar": "^0.1.5",
+    "pigeon-maps": "^0.21.0",
     "react": "^18.1.0",
     "react-big-calendar": "^0.40.1",
     "react-dom": "^18.1.0",
