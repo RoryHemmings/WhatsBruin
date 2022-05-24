@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../queries');
-
-
 const getCalendar = async (req, res) => {
   let date = req.query.date;
   if (date == null)
