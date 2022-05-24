@@ -116,6 +116,37 @@ const postCreateEvent = async (request, response) => {
 
 };
 
+const postEditEvent = async (request, response) => {
+  //tags is already an array!
+  let event = {
+      eventid: request.body.eventid,
+      title: request.body.title,
+      description: request.body.description,
+      date: request.body.date,
+      weekday: request.body.weekday,
+      starttime: request.body.starttime,
+      endtime: request.body.endtime,
+      location: request.body.location,
+      tags: request.body.tags,
+      picture: request.body.picture,
+  };
+  if(!(event.eventid && event.title && event.description && event.date && event.weekday && event.starttime && event.endtime && event.location)){
+    // return response.status(400).json({message: "bad request; make sure nothing is null"});
+  }
+  db.query(`UPDATE events SET title = $2, description = $3, date = $4, weekday = $5, starttime = $6, endtime = $7, location = $8, tags = $9, picture = $10 
+         WHERE id=$1`,
+  [event.eventid, event.title, event.description, event.date, event.weekday, event.starttime, event.endtime, event.location, event.tags, event.picture],
+      (error, results) => {
+    if (error) {
+      // return response.status(400).json({message : "event could not be edited"});
+    }
+  });
+  return response.status(201).send({ event: event });
+
+};
+
+
+
 const postDeleteEvent = async (request, response) => {
     let eventid = request.body.eventid;
     let userid = request.body.userid;
@@ -142,6 +173,7 @@ const postDeleteEvent = async (request, response) => {
   };
 router.post('/create', postCreateEvent);
 router.post('/delete', postDeleteEvent);
+router.post('/edit', postEditEvent);
 router.get('/', getEvent);
 router.get('/byUser', getEventsByUser);
 router.get('/byTags', getEventsByTags);
