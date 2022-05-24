@@ -118,10 +118,4 @@ router.post('/removeevent', postRemoveEvent);
 router.post('/addlike', postAddLike);
 router.post('/removelike', postRemoveLike);
 
-// router.post('/removelike', utils.authenticateToken, postRemoveLike);
-
-// router.get('/private', utils.authenticateToken, (req, res) => {
-//   res.status(200).json("private test");
-// });
-
 module.exports = router;

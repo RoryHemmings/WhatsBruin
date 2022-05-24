@@ -2,18 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../queries');
 
-function getEvent(eventid) {
-  return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM events WHERE id=$1', [eventid], (err, data) => {
-        if (err)
-          reject(err);
-
-        const event = data.rows[0];
-        resolve(event);
-      });
-  });
-}
-
 const getCalendar = async (req, res) => {
   let date = req.query.date;
   if (date == null)
