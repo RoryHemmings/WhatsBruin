@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './Calendar.css';
 //import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import FullCalendar, { formatDate } from '@fullcalendar/react'
@@ -15,7 +15,7 @@ import Popup from 'reactjs-popup';
 import Box from '@material-ui/core/Box';
 
 export default class Calendar extends React.Component {
-
+   
   state = {
     weekendsVisible: true,
     currentEvents: []
@@ -42,6 +42,9 @@ export default class Calendar extends React.Component {
         property = {{
           contentHeight: 550,
         }}
+        // events={
+        // //  url: "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date=2022-05-22",
+        // }
         weekends={this.state.weekendsVisible}
         initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
         //select={this.handleDateSelect}
