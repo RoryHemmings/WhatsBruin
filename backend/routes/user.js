@@ -59,16 +59,36 @@ const getUser = async (req, res) => {
     }
   });
 };
+const getUserTags = async (request, response) => {
+  let userid = request.query.userid;
+  db.query('SELECT likes FROM users WHERE id=$1', [userid], async (error, results) => {
+    if (error) {
+      console.log(error);
+      return results.status(500).json({ message: 'database error' });
+    }
+    if (results.rowCount < 1){
+      return response.status(400).json({message: 'no user with that id exists'});
+    }
+  response.status(200).json({likes: results.rows});
 
+  });
+}
 const postAddEvent = async (request, response) => {
   let eventid = request.body.eventid;
   let userid = request.body.userid;
   db.query('UPDATE users SET addedevents = ARRAY_APPEND(addedevents, $1) WHERE id=$2 AND NOT ($3 = ANY (addedevents))',
     [eventid, userid, eventid], (error, results) => {
       if (error) {
-        throw error;
+        console.log(error);
+        return response.status(500).send({message: 'database error'});
       }
     });
+  db.query('UPDATE events SET num_attendee = num_attendee + 1 WHERE id=$1', [eventid], (error, results) => {
+    if (error) {
+      console.log(error);
+      return response.status(500).send({message: 'database error'});
+    }
+  });
   response.status(201).send({ add: eventid });
 
 };
@@ -79,9 +99,16 @@ const postRemoveEvent = async (request, response) => {
   db.query('UPDATE users SET addedevents = ARRAY_REMOVE(addedevents, $1) WHERE id=$2 AND ($3 = ANY (addedevents))',
     [eventid, userid, eventid], (error, results) => {
       if (error) {
-        throw error;
+        console.log(error);
+        return response.status(500).send({message: 'database error'});
       }
     });
+  db.query('UPDATE events SET num_attendee = num_attendee - 1 WHERE id=$1', [eventid], (error, results) => {
+    if (error) {
+      console.log(error);
+      return response.status(500).send({message: 'database error'});
+    }
+  });
   response.status(201).send({ remove: eventid });
 
 };
@@ -112,6 +139,7 @@ const postRemoveLike = async (request, response) => {
 };
 
 router.get('/', utils.authenticateToken, getUser);
+router.get('/tags', getUserTags);
 router.post('/addevent', postAddEvent);
 router.post('/removeevent', postRemoveEvent);
 router.post('/addlike', postAddLike);
