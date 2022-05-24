@@ -59,6 +59,87 @@ const getUser = async (req, res) => {
     }
   });
 };
+const getUserAddedEvents = async (req, res) => {
+  const id = req.query.userid;
+  if (id == null)
+    return res.status(400).json({ message: 'no user id provided' });
+
+  db.query('SELECT * FROM users WHERE id=$1', [id], async (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'database error' });
+    }
+
+    if (data.rowCount < 1)
+      return res.status(400).json({message: 'no user with that id exists'});
+
+    let events = [];
+    const eventids = data.rows[0].addedevents;
+    try {
+      for (let i = 0; i < eventids.length; i++){
+        events.push(await getEvent(eventids[i]));
+      }
+      events.sort((a,b) => {
+        if(a.date == b.date){
+          if(a.time > b.time){
+            return 1;
+          }
+          if(a.time < b.time){
+            return -1;
+          }
+          return 0;
+        }  
+        if(a.date < b.date)
+              return -1;
+        if(a.date > b.date)
+            return 1;
+      });
+      res.status(200).json({
+        events: events,
+      });
+    }
+    catch (err) {
+      return res.status(500).json({message: 'invalid event id'});
+    }
+  });
+}
+  const getUserCreatedEvents = async (req, res) => {
+    const id = req.query.userid;
+    if (id == null)
+      return res.status(400).json({ message: 'no user id provided' });
+  
+    db.query('SELECT * FROM events WHERE organizer=$1', [id], async (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'database error' });
+      }
+  
+      if (data.rowCount < 1)
+        return res.status(400).json({message: 'no user with that id exists'});
+  
+      let events = data.rows;
+      console.log(events);
+        events.sort((a,b) => {
+          if(a.date == b.date){
+            if(a.time > b.time){
+              return 1;
+            }
+            if(a.time < b.time){
+              return -1;
+            }
+            return 0;
+          }  
+          if(a.date < b.date)
+                return -1;
+          if(a.date > b.date)
+              return 1;
+        });
+        res.status(200).json({
+          events: events,
+        });
+    });
+  }
+
 const getUserTags = async (request, response) => {
   let userid = request.query.userid;
   db.query('SELECT likes FROM users WHERE id=$1', [userid], async (error, results) => {
@@ -139,6 +220,8 @@ const postRemoveLike = async (request, response) => {
 };
 
 router.get('/', utils.authenticateToken, getUser);
+router.get('/addedevents',  getUserAddedEvents)
+router.get('/createdevents', getUserCreatedEvents);
 router.get('/tags', getUserTags);
 router.post('/addevent', postAddEvent);
 router.post('/removeevent', postRemoveEvent);
