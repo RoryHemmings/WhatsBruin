@@ -4,6 +4,7 @@ const db = require('../queries');
 const utils = require('../utils');
 
 function getEvents(title) {
+  title = title.toLowerCase();
   return new Promise((resolve, reject) => {
       let keywords = title.split(' ');
       let query = "SELECT * FROM events WHERE SIMILARITY(title, $1) > 0.3 OR title LIKE $2 ";
@@ -19,11 +20,7 @@ function getEvents(title) {
           return reject(err);
         }
 
-        if (data.rowCount < 1)
-          return resolve({status: 200, message: "no results were found"});
-
-        const events = data.rows;
-        resolve(events);
+        resolve(data.rows);
       });
   });
 }

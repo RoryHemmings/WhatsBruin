@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
-
+const utils = require('../utils');
 
 const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 
@@ -22,12 +22,12 @@ async function createNewUser(body, callback) {
 
   if (!checkEmailFormat(body.email))
     return callback({ status: 400, message: "Invalid email format" }, null);
-  
+
   if (body.username.length < 4 || body.username.length > 32)
-    return callback({ status: 400, message: "Username must be between 4 and 32 characters long"}, null);
-  
+    return callback({ status: 400, message: "Username must be between 4 and 32 characters long" }, null);
+
   if (body.password.length < 8 || body.password.length > 50)
-    return callback({ status: 400, message: "Password must be between 8 and 50 characters long"}, null);
+    return callback({ status: 400, message: "Password must be between 8 and 50 characters long" }, null);
 
   try {
     const passwordHash = await bcrypt.hash(body.password, 10);
@@ -80,6 +80,9 @@ router.post('/register', async (req, res, next) => {
               username: user.username,
             };
 
+            // Send initial recommendation email
+            utils.sendRecommendationEmail(user.email, "Welcome Recommendations");
+
             // Created new user
             res.status(201).send({ user: ret });
           });
@@ -90,33 +93,33 @@ router.post('/register', async (req, res, next) => {
 
 /* Authenticate the user */
 passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  },
+  usernameField: 'email',
+  passwordField: 'password'
+},
   (email, password, callback) => {
     db.query(
-    'SELECT * FROM users WHERE email=$1 LIMIT 1', [email],
-    async (err, data) => {
+      'SELECT * FROM users WHERE email=$1 LIMIT 1', [email],
+      async (err, data) => {
 
-      /* Make sure query was sucessful */
-      if (err) return callback(err);
-      if (data.rows.length < 1) return callback(null, null, { message: `User with that email does not exist` });
+        /* Make sure query was sucessful */
+        if (err) return callback(err);
+        if (data.rows.length < 1) return callback(null, null, { message: `User with that email does not exist` });
 
-      const user = data.rows[0];
-      /* Confirm that password is correct */
-      if (await bcrypt.compare(password, user.passwordhash)) {
-        return callback(null, user);  // success
-      } else {
-        return callback(null, null, { message: 'Incorrect password' })
-      }
-    });
-}));
+        const user = data.rows[0];
+        /* Confirm that password is correct */
+        if (await bcrypt.compare(password, user.passwordhash)) {
+          return callback(null, user);  // success
+        } else {
+          return callback(null, null, { message: 'Incorrect password' })
+        }
+      });
+  }));
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, message) => {
-    if (err) { 
+    if (err) {
       console.log(err);
-      return next({status: 500, message: "authentication error"}); 
+      return next({ status: 500, message: "authentication error" });
     }
 
     if (!user) return next({ status: 401, message: message });
@@ -127,9 +130,14 @@ router.post('/login', (req, res, next) => {
       email: user.email,
     }
 
-    const accessToken = jwt.sign(userInfo, process.env.JWT_ACCESS_SECRET, { expiresIn: '24h'});
+    const accessToken = jwt.sign(userInfo, process.env.JWT_ACCESS_SECRET, { expiresIn: '24h' });
     res.status(200).json({ user: userInfo, accessToken: accessToken });
   })(req, res, next);
+});
+
+router.get('/emailtest', (req, res, next) => {
+  utils.sendRecommendationEmail(req.query.email, "Welcome Recommendations");
+  res.status(200).send({message: "good one lmao"});
 });
 
 module.exports = router;

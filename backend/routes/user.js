@@ -100,7 +100,7 @@ const getUserCreatedEvents = async (req, res) => {
     });
   } catch (err) {
     next(err);
-  } 
+  }
 }
 
 const getUserTags = async (request, response) => {
