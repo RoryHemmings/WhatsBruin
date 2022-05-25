@@ -158,7 +158,6 @@ export default function EditForm(props) {
     }
     props.setShow(false);
     props.setSelected(null);
-
   };
 
   const categories = [
@@ -321,20 +320,21 @@ export default function EditForm(props) {
         >
           submit
         </Button>
-        <button
+        <Button
           sx={{
             marginTop: 4,
-            bgcolor: "#FCBA63",
+            marginLeft: 2,
+            bgcolor: "#dfdfdf",
             color: "#022A68",
             fontWeight: "bold",
           }}
-          onClick={()=>{
-              props.setShow(false);
-              props.setSelected(null);
-        }}
+          onClick={() => {
+            props.setShow(false);
+            props.setSelected(null);
+          }}
         >
           cancel
-        </button>
+        </Button>
       </Grid>
     </Box>
   );
