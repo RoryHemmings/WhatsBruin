@@ -30,10 +30,9 @@ useEffect (() => {
       return res.events;
     }
     else {
-      console.log("error stuff");
+      console.log("error");
     }
     setEvents(res.events);
-    console.log("hi");
   }
   getData().then(events => {
     console.log(events); setEvents(events)})
@@ -50,9 +49,6 @@ useEffect (() => {
           <h1 id="profile-name">{userInfo.username}</h1>
           <h3 id="profile-description">{userInfo.email}</h3>
           <br />
-          {/* <h2 class="italics" id="profile-description">
-            123 past events | 5 upcoming events
-          </h2> */}
         </div>
       </div>
       <div className="profile-events">

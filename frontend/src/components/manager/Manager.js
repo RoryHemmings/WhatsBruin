@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CreateEvent from "./CreateEvent";
+import EditEvent from "./EditEvent";
 import DeleteEvent from "./DeleteEvent";
 
 function TabPanel(props) {
@@ -66,7 +67,7 @@ function BasicTabs() {
 
       {/* TODO: connect with backend */}
       <TabPanel value={value} index={1}>
-        Select event to edit
+        <EditEvent/>
       </TabPanel>
 
       <TabPanel value={value} index={2}>
