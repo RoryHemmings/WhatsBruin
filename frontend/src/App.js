@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+//import FullCalendar from '@fullcalendar/react' // must go before plugins
+//import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import {Route, Routes} from "react-router-dom"
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home'
