@@ -26,7 +26,7 @@ app.use(cors());
 
 /* GET home page. */
 app.get('/', (req, res, next) => {
-  res.json({'code': 200});
+  res.status(200).json({ message: 'api is up' });
 });
 
 app.use('/home', homeRouter);
