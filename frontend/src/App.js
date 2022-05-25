@@ -11,6 +11,7 @@ import Profile from './components/profile/Profile';
 import Signup from './components/account/Signup';
 import Login from './components/account/Login';
 import Logout from './components/account/Logout';
+import Search from './components/search/Search';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/Signup" element={<Signup/>}></Route>
         <Route path="/Login" element={<Login/>}></Route>
         <Route path="/Logout" element={<Logout/>}></Route>
+        <Route path="/Search" element={<Search/>}></Route>
       </Routes>
     </div>
 

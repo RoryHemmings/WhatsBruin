@@ -17,15 +17,17 @@ import { getWithExpiry } from '../../Token';
 
 const Navbar = () => {
   let userStruct = getWithExpiry("user");
-  const pages = ['Calendar', 'Manager'];
+  let pages = [];
   let settings = [];
   const unauth_settings = ['Signup', 'Login'];
   const auth_settings = ['Profile', 'Logout'];
   if(userStruct !== null){
     settings = auth_settings;
+    pages = ['Calendar', 'Search', 'Manager'];
   }
   else {
     settings = unauth_settings;
+    pages = ['Calendar', 'Search'];
   }
 
   

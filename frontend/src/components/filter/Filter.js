@@ -30,8 +30,8 @@ const categories = [
 
 const locations = [
   "🧑‍💻 Virtual",
-  "🏫 On Campus",
   "🏔 On the Hill",
+  "🏫 On Campus",
   "🍪 Westwood",
   "🚗 LA",
 ];

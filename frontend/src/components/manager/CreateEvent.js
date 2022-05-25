@@ -178,8 +178,8 @@ export default function CreateEvent() {
 
   const locations = [
     "🧑‍💻 Virtual",
-    "🏫 On Campus",
     "🏔 On the Hill",
+    "🏫 On Campus",
     "🍪 Westwood",
     "🚗 LA",
   ];
