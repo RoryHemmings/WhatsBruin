@@ -8,7 +8,6 @@ import Grid from "@mui/material/Grid";
 import jwt_decode from "jwt-decode";
 
 export default function EditForm(props) {
-console.log("editform props ", props);
   const initialState = {
     eventName: props.event.title,
     date: props.event.date,

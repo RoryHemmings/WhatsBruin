@@ -42,7 +42,6 @@ export default function EditEvent() {
 
     const handleClick = async (event) => {
         setSelected(event);
-        console.log("selected, ", selected);
         setShowEdit(true);
     }
     // let showForm = () => {
@@ -74,6 +73,7 @@ export default function EditEvent() {
                         ? (
                             <>
                                 <Form
+                                    key={selected.id}
                                     event={selected}
                                     setShow={setShowEdit}
                                     setSelected={setSelected}
