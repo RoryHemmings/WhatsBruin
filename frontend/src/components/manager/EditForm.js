@@ -30,13 +30,9 @@ console.log("editform props ", props);
 
   const [allValues, setAllValues] = useState(initialState);
   const [isFormInvalid, setIsFormInvalid] = useState(initialError);
-  const [rerender, setRerender] = useState(false);
   const userInfo = jwt_decode(getWithExpiry("user"));
-
   const changeHandler = (e) => {
     setAllValues({ ...allValues, [e.target.name]: e.target.value });
-    console.log(e.target.name);
-    console.log(e.target.value);
   };
 
   const validate = (e) => {
@@ -160,12 +156,10 @@ console.log("editform props ", props);
 
       setIsFormInvalid({ ...initialError });
       setAllValues({ ...initialState });
-    } else {
-      setRerender(!rerender);
     }
+    props.setShow(false);
+    props.setSelected(null);
 
-    event.currentTarget.reset();
-    console.log(isFormInvalid);
   };
 
   const categories = [
@@ -328,6 +322,20 @@ console.log("editform props ", props);
         >
           submit
         </Button>
+        <button
+          sx={{
+            marginTop: 4,
+            bgcolor: "#FCBA63",
+            color: "#022A68",
+            fontWeight: "bold",
+          }}
+          onClick={()=>{
+              props.setShow(false);
+              props.setSelected(null);
+        }}
+        >
+          cancel
+        </button>
       </Grid>
     </Box>
   );

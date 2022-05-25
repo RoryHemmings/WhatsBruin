@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
 import { getWithExpiry } from "../../Token";
-import Grid from "@mui/material/Grid";
 import jwt_decode from "jwt-decode";
 import Form from "./EditForm";
 import { Navigate } from "react-router-dom";
@@ -13,10 +8,8 @@ import { Navigate } from "react-router-dom";
 export default function EditEvent() {
     const [events, setEvents] = useState([]);
     const userInfo = jwt_decode(getWithExpiry("user"));
-    const [rerender, setRerender] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [selected, setSelected] = useState(null);
-    let editForm;
     useEffect(() => {
         let user = getWithExpiry("user");
         let userInfo = jwt_decode(user);
@@ -45,15 +38,9 @@ export default function EditEvent() {
         getData().then(events => {
             setEvents(events)
         })
-    }, [rerender]);
+    }, [showEdit]);
 
-    useEffect(() => {
-        console.log(selected);
-        setRerender(!rerender);
-
-    }, [selected]);
     const handleClick = async (event) => {
-        console.log("event is", event);
         setSelected(event);
         console.log("selected, ", selected);
         setShowEdit(true);
@@ -86,11 +73,15 @@ export default function EditEvent() {
                     {showEdit
                         ? (
                             <>
-                                <Form event={selected}/>
+                                <Form
+                                    event={selected}
+                                    setShow={setShowEdit}
+                                    setSelected={setSelected}
+                                    show={showEdit}
+                                />
                             </>
                         ) : (
                             <>
-                                nothing
                             </>
                         )}
                 </div>
