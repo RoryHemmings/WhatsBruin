@@ -14,16 +14,73 @@ import * as ReactDOM from 'react-dom';
 import Popup from 'reactjs-popup';
 import Box from '@material-ui/core/Box';
 
+let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+
 export default class Calendar extends React.Component {
-   
-  state = {
+
+  constructor(props) {
+    super(props);
+  this.state = {
+    needPass: true,
     weekendsVisible: true,
     currentEvents: []
   }
+  }
+
+  
+
+  componentDidMount() {
+    fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date="+ todayStr, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+        method:"GET",
+      })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            currentEvents: result.events})
+      });
+ 
+  }
+
+
+
 
   render() {
+    const { weekendsVisible, currentEvents } = this.state;
+  
+
+
+    var eventList= [];
+    eventList = currentEvents.map(eventItem => {
+        return {
+
+          id: eventItem.id,
+          title: eventItem.title,
+          start: eventItem.date + 'T' + eventItem.starttime + ":00",
+          end: eventItem.date + 'T' + eventItem.endtime + ":00",
+          description: eventItem.description,
+          extendedProps: {
+            location: eventItem.location,
+            category: eventItem.tags,
+            weekday: eventItem.weekday,
+            num_attendee: eventItem.num_attendee,
+            organizer: eventItem.organizer,
+            organizeruser: eventItem.organizeruser
+           }
+          }; 
+
+    });
+
+
+
   return (
+
     <div className="App">
+
       <Filter/>
       <FullCalendar
         //<Typography textAlign="center"><Link style={{textDecoration: "none", color:"cornflowerblue"}} to={`/${setting}`}>{setting}</Link></Typography>
@@ -46,7 +103,8 @@ export default class Calendar extends React.Component {
         // //  url: "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date=2022-05-22",
         // }
         weekends={this.state.weekendsVisible}
-        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+        
+        events={eventList} // alternatively, use the `events` setting to fetch from a feed
         //select={this.handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={this.handleEventClick}
@@ -119,7 +177,7 @@ handleDateSelect = (selectInfo) => {
 }
 
 handleEventClick = (clickInfo) => {
-  console.log(clickInfo.event.extendedProps.location);
+  //console.log(clickInfo.event.extendedProps.location);
   popup(clickInfo.event, {type: "info", timeout: 1000});
   // if (prompt(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
   //   clickInfo.event.remove()
@@ -162,7 +220,7 @@ const popup = (Event, {type, timeout}) => {
   var description = Event.extendedProps.description;
   var category = Event.extendedProps.category;
   var location = Event.extendedProps.location;
-  console.log(description);
+  //console.log(description);
   const PopupContent = () => {
     return (
 
@@ -209,3 +267,5 @@ const popup = (Event, {type, timeout}) => {
   
   ReactDOM.render(<PopupContent/>, node);
 };
+
+

@@ -74,8 +74,19 @@ b { /* used for event dates/times */
   font-size: 1.5em;
   color: #00b294;
 }
-  
+.fc-event-time, .fc-event-title {
+  padding: 0 1px;
+  white-space: nowrap;
+}
 
+.fc-title {
+  white-space: normal;
+}
+.fc-event {
+  /* force events to be one-line tall */
+  white-space: nowrap !important;
+  overflow: hidden;
+} 
 .fc { /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
