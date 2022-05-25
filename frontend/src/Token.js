@@ -12,6 +12,9 @@ function setWithExpiry(key, value, ttl) { //key = user.
 }
 
 function getWithExpiry(key) {
+	if(localStorage.length === 0){
+		return null;
+	}
 	const itemStr = localStorage.getItem(key)
 	// if the item doesn't exist, return null
 	if (!itemStr) {
