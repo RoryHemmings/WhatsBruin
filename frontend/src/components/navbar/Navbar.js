@@ -27,7 +27,7 @@ const Navbar = () => {
   }
   else {
     settings = unauth_settings;
-    pages = ['Calendar', 'Search'];
+    pages = ['Search'];
   }
 
   

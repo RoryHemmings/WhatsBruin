@@ -85,6 +85,7 @@ export default function Login() {
       console.log(res.accessToken);
       setWithExpiry("user", res.accessToken, 86400000); //24 hours in milliseconds
       setRerender(!rerender);
+      window.location.reload(false);
       <Navigate to='/Profile'  />
     }
     else {
