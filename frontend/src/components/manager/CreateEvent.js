@@ -152,19 +152,19 @@ export default function CreateEvent() {
       if (status === 201) {
         console.log("works");
         console.log(res);
+        alert("Your event has been uploaded!");
+        setIsFormInvalid({ ...initialError });
+        setAllValues({ ...initialState });
       } else {
         alert(res.message);
         alert("error stuff");
       }
-
-      setIsFormInvalid({ ...initialError });
-      setAllValues({ ...initialState });
     } else {
       setRerender(!rerender);
     }
 
-    event.currentTarget.reset();
-    console.log(isFormInvalid);
+    // event.currentTarget.reset();
+    // console.log(isFormInvalid);
   };
 
   const categories = [

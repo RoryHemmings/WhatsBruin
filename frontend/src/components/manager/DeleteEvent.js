@@ -74,7 +74,6 @@ const DeleteEvent = () => {
     }
 
     setRerender(!rerender);
-    eventid.currentTarget.reset();
   };
 
   return (
