@@ -280,55 +280,77 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
   }
   const PopupContent = () => {
     return (
-
       <Popup type={type} open={open} timeout={timeout}>
         <div>
-          <Box flexDirection="column" sx={{
-            width: 300,
-            // height: 300,
-          }} color="white" bgcolor='#4997db' p={1}>
-
+          <Box
+            flexDirection="column"
+            sx={{
+              // width: 450,
+              paddingX: 3,
+              borderRadius: 10,
+              marginX: 3,
+            }}
+            color="white"
+            bgcolor="#4997db"
+            p={1}
+          >
             <h1 style={{ fontSize: "2rem" }}>
-              <span style={{ fontWeight: 'bold' }}> {title} </span>  {"\t"}
-
+              <span style={{ fontWeight: "bold" }}> {title} </span> {"\t"}
             </h1>
             <h3>
               <br />
-              <span style={{ fontWeight: 'bold' }}>Description:</span>  {"\t"}
+              <span style={{ fontWeight: "bold", color: "#FFEEAE" }}>
+                Description:
+              </span>{" "}
+              {"\t"}
               <br />
               {description}
               <p>
                 <br />
-
-                <span style={{ fontWeight: 'bold' }}>Category:</span> {"\t"}
+                <span style={{ fontWeight: "bold", color: "#FFEEAE" }}>
+                  Category:
+                </span>{" "}
+                {"\t"}
                 {category}
                 <br />
                 <br />
-                <span style={{ fontWeight: 'bold' }}>Location:</span>  {"\t"}
+                <span style={{ fontWeight: "bold", color: "#FFEEAE" }}>
+                  Location:
+                </span>{" "}
+                {"\t"}
                 {location}
                 <br />
                 <br />
               </p>
-              {userInfo ?
-                (
-                  !checkAdded() ? (
-                    <>
-                      <button onClick={() => { addevent() }}>add event to my calendar</button>
-                    </>
-                  ) : (
-                    <button onClick={() => { removeevent() }}>remove event from my calendar</button>
-                  )
-                ) : (
+              {userInfo ? (
+                !checkAdded() ? (
                   <>
+                    <button
+                      className='popup-add-button'
+                      onClick={() => {
+                        addevent();
+                      }}
+                    >
+                      add event to my calendar
+                    </button>
                   </>
+                ) : (
+                  <button
+                    className='popup-remove-button'
+                    onClick={() => {
+                      removeevent();
+                    }}
+                  >
+                    remove event from my calendar
+                  </button>
                 )
-              }
-
+              ) : (
+                <></>
+              )}
             </h3>
           </Box>
         </div>
-      </Popup >
-
+      </Popup>
     );
   };
 
