@@ -47,14 +47,6 @@ export default function EditEvent() {
     setSelected(event);
     setShowEdit(true);
   };
-  // let showForm = () => {
-  //     if (selected && showEdit) {
-  //         editForm = <Form event={selected} />;
-  //     }
-  //     else {
-  //         editForm =  <h2>nothing selected</h2>;
-  //     }
-  // }
   return (
     <div className="App">
       <div className="profile-events">
