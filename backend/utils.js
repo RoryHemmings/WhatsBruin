@@ -42,10 +42,15 @@ function getRecommendations(email) {
   });
 }
 
+function convertTime(t) {
+  time = t.split(':');
+  let hour = time[0] % 12;
+  let minute = time[1];
+  return hour + ':' + minute + ((time[0] >= 12) ? 'PM' : 'AM');
+}
+
 function getHTMLForEvents(events) {
   let ret = '';
-
-
   ret +=
     `<head>
       <meta charset="UTF-8">
@@ -131,7 +136,7 @@ function getHTMLForEvents(events) {
     ret +=
       `<li>
       <h3 class="orange">${events[i].title}</h3>
-      <p class="itallic">${events[i].date} ${events[i].starttime}-${events[i].endtime}</p>
+      <p class="itallic">${new Date(events[i].date).toDateString()} ${convertTime(events[i].starttime)}-${convertTime(events[i].endtime)}</p>
       <p>${events[i].description}</p>
     </li>`
   }
