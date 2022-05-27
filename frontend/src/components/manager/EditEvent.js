@@ -18,8 +18,8 @@ export default function EditEvent() {
     }
     const getData = async () => {
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user?userid=" +
-          userInfo.userid,
+        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" +
+        userInfo.userid,
         {
           headers: {
             Accept: "application/json",
@@ -49,38 +49,40 @@ export default function EditEvent() {
   };
   return (
     <div className="App">
-      <div className="profile-events">
-        <div className="cards">
-          {events?.map((event) => {
-            return (
-              <div className="card" key={event.id}>
-                <div>
-                  <h2>{event.title}</h2>
-                  <h3>{event.date}</h3>
-                  <h3>
-                    {event.starttime} - {event.endtime}
-                  </h3>
-                  <h3>{event.description}</h3>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    onClick={() => handleClick(event)}
-                    sx={{
-                      marginTop: 4,
-                      bgcolor: "#A5DAD2",
-                      color: "#022A68",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {" "}
-                    edit{" "}
-                  </Button>
+      <div className="profile-top">
+        <div className="profile-events">
+          <div className="cards">
+            {events?.map((event) => { }).length === 0 && "You have not created any events."}
+            {events?.map((event) => {
+              return (
+                <div className="card" key={event.id}>
+                  <div>
+                    <h2>{event.title}</h2>
+                    <h3>{event.date}</h3>
+                    <h3>
+                      {event.starttime} - {event.endtime}
+                    </h3>
+                    <h3>{event.description}</h3>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      onClick={() => handleClick(event)}
+                      sx={{
+                        marginTop: 4,
+                        bgcolor: "#A5DAD2",
+                        color: "#022A68",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {" "}
+                      edit{" "}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-        {showEdit ? (
+              );
+            })}
+          </div>
+          {showEdit ? (
             <>
               <Form
                 key={selected.id}
@@ -93,6 +95,7 @@ export default function EditEvent() {
           ) : (
             <></>
           )}
+        </div>
       </div>
     </div>
   );
