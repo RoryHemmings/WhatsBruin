@@ -41,16 +41,3 @@ h1 {
   font-family: Futura, "Trebuchet MS", Arial, sans-serif;
   margin-top: 1rem;
 }
-
-.popup-add-button {
-  background-color: #FFEEAE; 
-  border-radius: 5px;
-  padding: 0.5rem;
-}
-
-.popup-remove-button {
-  background-color: #F68C3E; 
-  color: white;
-  border-radius: 5px;
-  padding: 0.5rem;
-}

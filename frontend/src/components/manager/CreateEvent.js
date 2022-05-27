@@ -76,18 +76,18 @@ export default function CreateEvent() {
       isValid = false;
     }
 
-    if (allValues.selectCategory === "") {
-      isFormInvalid.selectCategory = true;
+    if (allValues.category === "") {
+      isFormInvalid.category = true;
       isValid = false;
     } else {
-      isFormInvalid.selectCategory = false;
+      isFormInvalid.category = false;
     }
 
-    if (allValues.selectLocation === "") {
-      isFormInvalid.selectLocation = true;
+    if (allValues.location === "") {
+      isFormInvalid.location = true;
       isValid = false;
     } else {
-      isFormInvalid.selectLocation = false;
+      isFormInvalid.location = false;
     }
 
     if (allValues.additionalNotes === "") {
