@@ -71,7 +71,7 @@ export default class Calendar extends React.Component {
         res = await res.json();
         if (status === 200) {
           console.log("works");
-          personalizedEvents = res.events.map((event) => { return event.id });
+          personalizedEvents = res.events?.map((event) => { return event.id });
         } else {
           alert(res.message);
           alert("error");
@@ -84,7 +84,7 @@ export default class Calendar extends React.Component {
     const { currentEvents } = this.state;
 
     var eventList = [];
-    eventList = currentEvents.map(eventItem => {
+    eventList = currentEvents?.map(eventItem => {
       return {
 
         id: eventItem.id,
@@ -224,7 +224,7 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
     );
     updatePersonalizedEvents = await updatePersonalizedEvents.json();
 
-    personalizedEvents = updatePersonalizedEvents.events.map((event) => { return event.id });
+    personalizedEvents = updatePersonalizedEvents.events?.map((event) => { return event.id });
     setTimeout( ()=>{
       ReactDOM.render(<PopupContent />, node);
     }, 150);
@@ -327,9 +327,9 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
                   <>
                     <button
                       className='popup-add-button'
-                      onClick={() => {
-                        addevent();
-                      }}
+                      onClick={
+                        addevent
+                      }
                     >
                       add event to my calendar
                     </button>
@@ -337,9 +337,9 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
                 ) : (
                   <button
                     className='popup-remove-button'
-                    onClick={() => {
-                      removeevent();
-                    }}
+                    onClick={
+                      removeevent
+                    }
                   >
                     remove event from my calendar
                   </button>
