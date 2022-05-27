@@ -6,7 +6,7 @@ require('dotenv').config();
 const EMAIL = process.env.EMAIL;
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'yahoo',
   auth: {
     user: EMAIL,
     pass: process.env.EMAIL_PASSWORD,
@@ -44,12 +44,108 @@ function getRecommendations(email) {
 
 function getHTMLForEvents(events) {
   let ret = '';
-  ret += '<h1>Here are your recommended events</h1><ol>'
+
+
+  ret +=
+    `<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>WhatsBruin Recommendations</title>
+      <link rel="stylesheet" href="./emailStyle.css">
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          border: 0;
+        }
+    
+        body {
+          font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+        }
+    
+        .margin {
+          margin: 2rem;
+        }
+    
+        .italic {
+          font-style: italic;
+        }
+    
+        ol {
+          margin: 1rem;
+        }
+    
+      .header {
+        background: #022a68;
+        color: white;
+        text-align: center;
+        padding: 3rem 0;
+      }
+    
+      .orange {
+        color: #f68c3e;
+      }
+    
+      h1 {
+        font-size: 2.5rem;
+      }
+    
+      h3 {
+        font-size: 1.5rem;
+      }
+    
+      li {
+        margin-bottom: 2rem;
+      }
+    
+      .outlined {
+        border: 2px dashed #FFEEAE;
+        padding: 2rem;
+        text-align: center;
+      }
+    
+      button {
+        border-radius: 5px;
+        background-color: #FCBA63;
+        padding: 15px;
+      }
+    
+      button:hover {
+        background-color: #F68C3E
+      }
+    </style>
+  </head>
+  
+  <body>
+      <div class="header">
+          <h1>Event Recommendations</h1>
+          <p class="italic">Powered by WhatsBruin</p>
+      </div>
+      <div class="margin">
+          <p>Based on your preferences, you might be interested in the following events:</p>
+          <br />
+          <ol>`;
+
   for (let i = 0; i < events.length; i++) {
-    ret += `<li>${events[i].title}</li><br>` 
+    ret +=
+      `<li>
+      <h3 class="orange">${events[i].title}</h3>
+      <p class="itallic">${events[i].date} ${events[i].starttime}-${events[i].endtime}</p>
+      <p>${events[i].description}</p>
+    </li>`
   }
 
-  ret += '</ol>';
+  ret += `</ol>
+          <br />
+          <div class="outlined">
+              <p>For more information, click the button below to visit our application:</p>
+              <br/>
+              <button><b>Visit WhatsBruin!</b></button>
+          </div>
+      </div>
+  </body>
+  `
   return ret;
 }
 
@@ -75,7 +171,6 @@ async function sendRecommendationEmail(email, subject) {
     const events = await getRecommendations(email);
     const content = getHTMLForEvents(events);
 
-    console.log(content);
     sendEmail(email, subject, content);
   } catch (err) {
     console.log("recommendation email error: ", err);
