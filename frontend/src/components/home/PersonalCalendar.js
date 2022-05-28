@@ -1,19 +1,18 @@
 import React from 'react';
-import './Calendar.css';
+import '../calendar/Calendar.css';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { getWithExpiry } from "../../Token";
 import jwt_decode from "jwt-decode";
-import Filter from '../filter/Filter';
-
 import * as ReactDOM from 'react-dom';
 import Popup from 'reactjs-popup';
 import Box from '@material-ui/core/Box';
-let userInfo = getWithExpiry("user");
-if (userInfo) {
-  userInfo = jwt_decode(userInfo);
+let user = getWithExpiry("user");
+let userInfo;
+if (user) {
+  userInfo = jwt_decode(user);
 }
 let personalizedEvents = [];
 
@@ -25,39 +24,41 @@ export default class Calendar extends React.Component {
     this.state = {
       needPass: true,
       currentEvents: [],
-      open: true,
-      calDate: todayStr
+      rerender: false,
     }
   }
+
   componentDidMount() {
-    fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date=" + todayStr, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            currentEvents: result.events
-          })
+    (async () => {
+      let res = await fetch(
+        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user?userid=" + userInfo.userid,
+        {
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization" : "Bearer " + user,
+          },
+          method: "GET",
+        }
+      );
+      const status = res.status;
+      res = await res.json();
+      if (status === 200) {
+        console.log("works");
+        this.setState({
+          currentEvents : res.events
         });
-    const getJWT = async () => {
-      userInfo = getWithExpiry("user");
-      if (userInfo) {
-        userInfo = jwt_decode(userInfo);
-        console.log("userinfo", userInfo);
+      } else {
+        alert(res.message);
+        alert("error");
       }
-    }
-    if (userInfo) {
+    })();
       (async () => {
         let res = await fetch(
           "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
           {
             headers: {
-              "Accept": "application/json",
+              Accept: "application/json",
               "Content-Type": "application/json",
             },
             method: "GET",
@@ -73,15 +74,18 @@ export default class Calendar extends React.Component {
           alert("error");
         }
       })();
-    }
   }
 
   render() {
     const { currentEvents } = this.state;
-    var eventList = [];
-    eventList = currentEvents?.map(eventItem => {
+    var eventList = currentEvents;
+    eventList = eventList.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.id === value.id
+      ))
+    )
+    eventList = eventList?.map(eventItem => {
       return {
-
         id: eventItem.id,
         title: eventItem.title,
         start: eventItem.date + 'T' + eventItem.starttime + ":00",
@@ -100,8 +104,6 @@ export default class Calendar extends React.Component {
     return (
 
       <div className="App">
-
-        <Filter />
         <FullCalendar
           //<Typography textAlign="center"><Link style={{textDecoration: "none", color:"cornflowerblue"}} to={`/${setting}`}>{setting}</Link></Typography>
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -115,41 +117,6 @@ export default class Calendar extends React.Component {
           selectable={true}
           selectMirror={true}
           dayMaxEvents={true}
-          datesSet={(args) => {
-            let monthDate = ("###datesSet:", args).startStr.substring(0, 10); //YYYY-MM-DD
-            if (parseInt(monthDate.substring(8, 11), 10) > 10) {
-              if (monthDate.substring(5, 7) === "12") {
-                monthDate = monthDate.substring(0, 5) + "01-01";
-              }
-              else {
-                var correctMonth = parseInt(monthDate.substring(5, 7), 10) + 1;
-                if (correctMonth < 9) {
-                  monthDate = monthDate.substring(0, 5) + "0" + correctMonth + "-01";
-                }
-                else {
-                  monthDate = monthDate.substring(0, 5) + correctMonth + "-01";
-                }
-              }
-            }
-            else {
-              monthDate = monthDate.substring(0, 8) + "01";
-            }
-            fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date=" + monthDate, {
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-              },
-              method: "GET",
-            })
-              .then((res) => res.json())
-              .then(
-                (result) => {
-                    this.setState({
-                      currentEvents: result.events
-                    })
-                  }
-                )
-          }}
           events={eventList}
           eventContent={renderEventContent} // custom render function
           eventClick={this.handleEventClick}
@@ -158,11 +125,11 @@ export default class Calendar extends React.Component {
 
     );
   }
-  alteropen = (status) => {
-    this.setState({ open: status });
+  rerender = () => {
+    this.setState({ rerender: !this.state.rerender });
   }
   handleEventClick = (clickInfo) => {
-    popup(clickInfo.event, { type: "info", timeout: 1000 }, this.state.open, this.alteropen);
+    popup(clickInfo.event, { type: "info", timeout: 1000 }, this.rerender);
   }
 }
 //end of calendar class
@@ -181,14 +148,14 @@ function renderEventContent(eventInfo) {
 //popup
 
 const node = document.createElement("div");
-const popup = (Event, { type, timeout }, isOpen, setOpen) => {
+const popup = (Event, { type, timeout }, rerender) => {
   document.body.appendChild(node);
   var title = Event.title;
   var description = Event.extendedProps.description;
   var category = Event.extendedProps.category;
   var location = Event.extendedProps.location;
   var organizer = Event.extendedProps.organizeruser;
-  let open = isOpen;
+  let smallOpen = true;
   function checkAdded() {
     return personalizedEvents.includes(Event.id);
   }
@@ -221,8 +188,6 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
       alert(res.message);
       alert("error");
     }
-    open = false;
-
     let updatePersonalizedEvents = await fetch(
       "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
       {
@@ -236,6 +201,8 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
     updatePersonalizedEvents = await updatePersonalizedEvents.json();
 
     personalizedEvents = updatePersonalizedEvents.events?.map((event) => { return event.id });
+    rerender();
+    smallOpen = false;
     setTimeout(() => {
       ReactDOM.render(<PopupContent />, node);
     }, 150);
@@ -270,7 +237,6 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
       alert(res.message);
       alert("error");
     }
-    open = false;
     let updatePersonalizedEvents = await fetch(
       "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
       {
@@ -284,7 +250,8 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
     updatePersonalizedEvents = await updatePersonalizedEvents.json();
 
     personalizedEvents = updatePersonalizedEvents.events.map((event) => { return event.id });
-
+    rerender();
+    smallOpen = false;
     setTimeout(() => {
       ReactDOM.render(<PopupContent />, node);
     }, 150);
@@ -292,7 +259,7 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
   const PopupContent = () => {
     return (
 
-      <Popup type={type} open={open} timeout={timeout}>
+      <Popup type={type} open={smallOpen} timeout={timeout}>
         <div>
         <Box
              flexDirection="column"
@@ -318,9 +285,11 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
                  Description:
                </span>{" "}
                {"\t"}
+              <br />
               {description}
               <p>
                 <br />
+
                 <span style={{ fontWeight: 'bold' }}>Category:</span> {"\t"}
                 {category}
                 <br />
