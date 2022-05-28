@@ -124,6 +124,7 @@ const handleSubmit = async (eventid) => {
                   <h3>{event.date}</h3>
                   <h3>{event.starttime} - {event.endtime}</h3>
                   <h3>{event.description}</h3>
+                  <h4>RSVPs: {event.num_attendee}</h4>
                 </div>
               </div>
             );
