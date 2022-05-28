@@ -293,10 +293,18 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
 
       <Popup type={type} open={open} timeout={timeout}>
         <div>
-          <Box flexDirection="column" sx={{
-            width: 300,
-            // height: 300,
-          }} color="white" bgcolor='#4997db' p={1}>
+        <Box
+             flexDirection="column"
+             sx={{
+               // width: 450,
+               paddingX: 3,
+               borderRadius: 10,
+               marginX: 3,
+             }}
+             color="white"
+             bgcolor="#4997db"
+             p={1}
+           >
 
             <h1 style={{ fontSize: "2rem" }}>
               <span style={{ fontWeight: 'bold' }}> {title} </span>  {"\t"}
@@ -304,7 +312,10 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
             </h1>
             <h3>
               <br />
-              <span style={{ fontWeight: 'bold' }}>Description:</span>  {"\t"}
+              <span style={{ fontWeight: "bold", color: "#FFEEAE" }}>
+                 Description:
+               </span>{" "}
+               {"\t"}
               <br />
               {description}
               <p>
@@ -323,10 +334,10 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
                 (
                   !checkAdded() ? (
                     <>
-                      <button onClick={addevent}>add event to my calendar</button>
+                      <button className="popup-add-button" onClick={addevent}>add event to my calendar</button>
                     </>
                   ) : (
-                    <button onClick={removeevent}>remove event from my calendar</button>
+                    <button className="popup-remove-button" onClick={removeevent}>remove event from my calendar</button>
                   )
                 ) : (
                   <>
