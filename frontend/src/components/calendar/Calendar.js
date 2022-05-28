@@ -6,21 +6,19 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { getWithExpiry } from "../../Token";
 import jwt_decode from "jwt-decode";
-
-import { INITIAL_EVENTS, createEventId } from './Event-Utils'
 import Filter from '../filter/Filter';
 
 import * as ReactDOM from 'react-dom';
 import Popup from 'reactjs-popup';
 import Box from '@material-ui/core/Box';
-import { isOptionGroup } from '@mui/base';
 let userInfo = getWithExpiry("user");
 if (userInfo) {
   userInfo = jwt_decode(userInfo);
 }
 let personalizedEvents = [];
 
-let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+const todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
+// let myDate = todayStr;
 export default class Calendar extends React.Component {
 
   constructor(props) {
@@ -29,10 +27,9 @@ export default class Calendar extends React.Component {
       needPass: true,
       currentEvents: [],
       open: true,
+      calDate: todayStr
     }
   }
-
-
   componentDidMount() {
     fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date=" + todayStr, {
       headers: {
@@ -82,7 +79,6 @@ export default class Calendar extends React.Component {
 
   render() {
     const { currentEvents } = this.state;
-
     var eventList = [];
     eventList = currentEvents?.map(eventItem => {
       return {
@@ -101,10 +97,7 @@ export default class Calendar extends React.Component {
           organizeruser: eventItem.organizeruser
         }
       };
-
     });
-
-
     return (
 
       <div className="App">
@@ -123,9 +116,40 @@ export default class Calendar extends React.Component {
           selectable={true}
           selectMirror={true}
           dayMaxEvents={true}
-
-          property={{
-            contentHeight: 550,
+          datesSet={(args) => {
+            let monthDate = ("###datesSet:", args).startStr.substring(0, 10); //YYYY-MM-DD
+            if (parseInt(monthDate.substring(8, 11), 10) > 10) {
+              if (monthDate.substring(5, 7) === "12") {
+                monthDate = monthDate.substring(0, 5) + "01-01";
+              }
+              else {
+                var correctMonth = parseInt(monthDate.substring(5, 7), 10) + 1;
+                if (correctMonth < 9) {
+                  monthDate = monthDate.substring(0, 5) + "0" + correctMonth + "-01";
+                }
+                else {
+                  monthDate = monthDate.substring(0, 5) + correctMonth + "-01";
+                }
+              }
+            }
+            else {
+              monthDate = monthDate.substring(0, 8) + "01";
+            }
+            fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/home?date=" + monthDate, {
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              method: "GET",
+            })
+              .then((res) => res.json())
+              .then(
+                (result) => {
+                    this.setState({
+                      currentEvents: result.events
+                    })
+                  }
+                )
           }}
           events={eventList} // alternatively, use the `events` setting to fetch from a feed
           //select={this.handleDateSelect}
@@ -142,6 +166,14 @@ export default class Calendar extends React.Component {
 
     );
   }
+  // rerender = () => {
+  //   if(this.state.calDate !== myDate){
+  //     this.setState({calDate : myDate});
+  //   }
+  //   else{
+  //     return <></>
+  //   }
+  // }
   alteropen = (status) => {
     this.setState({ open: status });
   }
@@ -149,11 +181,12 @@ export default class Calendar extends React.Component {
     popup(clickInfo.event, { type: "info", timeout: 1000 }, this.state.open, this.alteropen);
   }
 
-  handleEvents = (events) => {
-    this.setState({
-      currentEvents: events
-    })
-  }
+
+  // handleEvents = (events) => {
+  //   this.setState({
+  //     currentEvents: events
+  //   })
+  // }
 }
 //end of calendar class
 
@@ -225,7 +258,7 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
     updatePersonalizedEvents = await updatePersonalizedEvents.json();
 
     personalizedEvents = updatePersonalizedEvents.events?.map((event) => { return event.id });
-    setTimeout( ()=>{
+    setTimeout(() => {
       ReactDOM.render(<PopupContent />, node);
     }, 150);
 
@@ -274,7 +307,7 @@ const popup = (Event, { type, timeout }, isOpen, setOpen) => {
 
     personalizedEvents = updatePersonalizedEvents.events.map((event) => { return event.id });
 
-    setTimeout( ()=>{
+    setTimeout(() => {
       ReactDOM.render(<PopupContent />, node);
     }, 150);
   }
