@@ -18,7 +18,6 @@ if (userInfo) {
 let personalizedEvents = [];
 
 const todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-// let myDate = todayStr;
 export default class Calendar extends React.Component {
 
   constructor(props) {
@@ -151,42 +150,20 @@ export default class Calendar extends React.Component {
                   }
                 )
           }}
-          events={eventList} // alternatively, use the `events` setting to fetch from a feed
-          //select={this.handleDateSelect}
+          events={eventList}
           eventContent={renderEventContent} // custom render function
           eventClick={this.handleEventClick}
-        //eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
-        /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
         />
       </div>
 
     );
   }
-  // rerender = () => {
-  //   if(this.state.calDate !== myDate){
-  //     this.setState({calDate : myDate});
-  //   }
-  //   else{
-  //     return <></>
-  //   }
-  // }
   alteropen = (status) => {
     this.setState({ open: status });
   }
   handleEventClick = (clickInfo) => {
     popup(clickInfo.event, { type: "info", timeout: 1000 }, this.state.open, this.alteropen);
   }
-
-
-  // handleEvents = (events) => {
-  //   this.setState({
-  //     currentEvents: events
-  //   })
-  // }
 }
 //end of calendar class
 
