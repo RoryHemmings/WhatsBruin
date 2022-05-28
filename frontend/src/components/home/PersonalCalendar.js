@@ -6,8 +6,6 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { getWithExpiry } from "../../Token";
 import jwt_decode from "jwt-decode";
-import Filter from '../filter/Filter';
-
 import * as ReactDOM from 'react-dom';
 import Popup from 'reactjs-popup';
 import Box from '@material-ui/core/Box';
@@ -106,8 +104,6 @@ export default class Calendar extends React.Component {
     return (
 
       <div className="App">
-
-        <Filter />
         <FullCalendar
           //<Typography textAlign="center"><Link style={{textDecoration: "none", color:"cornflowerblue"}} to={`/${setting}`}>{setting}</Link></Typography>
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

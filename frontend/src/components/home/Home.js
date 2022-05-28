@@ -15,6 +15,7 @@ export default function Home(){
       <div>
         <PersonalCalendar/>
         <br/>
+        <p style={{color: "#F68C3E", fontSize: 40}}>reference map {"<3"} </p>
         <LocationMap />
       </div>
     </div>
