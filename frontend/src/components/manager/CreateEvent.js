@@ -76,18 +76,18 @@ export default function CreateEvent() {
       isValid = false;
     }
 
-    if (allValues.category === "") {
-      isFormInvalid.category = true;
+    if (allValues.selectCategory === "") {
+      isFormInvalid.selectCategory = true;
       isValid = false;
     } else {
-      isFormInvalid.category = false;
+      isFormInvalid.selectCategory = false;
     }
 
-    if (allValues.location === "") {
-      isFormInvalid.location = true;
+    if (allValues.selectLocation === "") {
+      isFormInvalid.selectLocation = true;
       isValid = false;
     } else {
-      isFormInvalid.location = false;
+      isFormInvalid.selectLocation = false;
     }
 
     if (allValues.additionalNotes === "") {
@@ -152,19 +152,19 @@ export default function CreateEvent() {
       if (status === 201) {
         console.log("works");
         console.log(res);
+        alert("Your event has been uploaded!");
+        setIsFormInvalid({ ...initialError });
+        setAllValues({ ...initialState });
       } else {
         alert(res.message);
         alert("error stuff");
       }
-
-      setIsFormInvalid({ ...initialError });
-      setAllValues({ ...initialState });
     } else {
       setRerender(!rerender);
     }
 
-    event.currentTarget.reset();
-    console.log(isFormInvalid);
+    // event.currentTarget.reset();
+    // console.log(isFormInvalid);
   };
 
   const categories = [

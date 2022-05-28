@@ -15,7 +15,7 @@ const DeleteEvent = () => {
     let userInfo = jwt_decode(user);
     const getData = async () => {
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user?userid=" +
+        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" +
           userInfo.userid,
         {
           headers: {
@@ -74,7 +74,6 @@ const DeleteEvent = () => {
     }
 
     setRerender(!rerender);
-    eventid.currentTarget.reset();
   };
 
   return (
