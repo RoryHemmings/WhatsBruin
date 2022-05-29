@@ -9,7 +9,7 @@ export default function LocationMap() {
   const [selected, setSelected] = useState(hill);
   return (
     <div>
-      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly"}}>
+      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10}}>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(hill) }}>the hill</button>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(northCampus) }}>north campus</button>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(southCampus) }}>south campus</button>

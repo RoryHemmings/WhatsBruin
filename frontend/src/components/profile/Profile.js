@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import sampleImage from "./logo192.png";
 import { getWithExpiry } from "../../Token";
@@ -9,96 +9,197 @@ import Button from "@mui/material/Button";
 
 
 const Profile = () => {
-const [events, setEvents] = useState([]);
-const [addedEvents, setAddedEvents] = useState([]);
-const userInfo = jwt_decode(getWithExpiry("user"));
-const [rerender, setRerender] = useState(false);
-useEffect (() => {
-  console.log("state called");
-  let user = getWithExpiry("user");
-  let userInfo = jwt_decode(user);
-  if(userInfo === null){
-    return <Navigate to='/Signup'/>
-  }
-  const getData = async () => {
-    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" + userInfo.userid, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization' : 'Bearer ' + user,
-    },
-      method:"GET",
-    })
-    const status = res.status;
-    res = await res.json();
-    if(status < 400) {
-      return res.events;
+  const categories = [
+    "📚 Academics",
+    "🎨 Fine Arts",
+    "🎭 Performing Arts",
+    "🎉 Socials",
+    "⚽️ Sports",
+    "🧘‍♀️ Wellness",
+  ];
+  const [events, setEvents] = useState([]);
+  const [addedEvents, setAddedEvents] = useState([]);
+  const [likedTags, setLikedTags] = useState([]);
+  const [normalTags, setNormalTags] = useState([]);
+  const userInfo = jwt_decode(getWithExpiry("user"));
+  const [rerender, setRerender] = useState(false);
+  useEffect(() => {
+    console.log("state called");
+    let user = getWithExpiry("user");
+    let userInfo = jwt_decode(user);
+    if (userInfo === null) {
+      return <Navigate to='/Signup' />
     }
-    else {
-      console.log("error");
-    }
-    setEvents(res.events);
-  }
-  getData().then(events => {
-    console.log(events); setEvents(events)})
-  const getAddedData = async () => {
-    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization' : 'Bearer ' + user,
-      },
-        method:"GET",
+    const getData = async () => {
+      let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" + userInfo.userid, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + user,
+        },
+        method: "GET",
       })
       const status = res.status;
       res = await res.json();
-      if(status < 400) {
+      if (status < 400) {
+        return res.events;
+      }
+      else {
+        console.log("error");
+      }
+      setEvents(res.events);
+    }
+    getData().then(events => {
+      console.log(events); setEvents(events)
+    })
+    const getAddedData = async () => {
+      let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + user,
+        },
+        method: "GET",
+      })
+      const status = res.status;
+      res = await res.json();
+      if (status < 400) {
         return res.events;
       }
       else {
         console.log("error");
         return [];
       }
-  }
-  getAddedData().then(addedEvents => {
-    console.log(addedEvents); setAddedEvents(addedEvents)})
-}, [rerender])
-
-
-const handleSubmit = async (eventid) => {
-  console.log("begin");
-  console.log("event.id: " + eventid);
-  console.log("userInfo.id: " + userInfo.userid);
-
-  let res = await fetch(
-    "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removeevent",
-    {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        eventid: eventid,
-        userid: userInfo.userid,
-      }),
     }
-  );
+    getAddedData().then(addedEvents => {
+      console.log(addedEvents); setAddedEvents(addedEvents)
+    })
+    const getTags = async () => {
+      let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/tags?userid=" + userInfo.userid, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + user,
+        },
+        method: "GET",
+      })
+      const status = res.status;
+      res = await res.json();
+      if (status < 400) {
+        return (res.likes);
+      }
+      else {
+        console.log("error");
+        return [];
+      }
+    }
+    getTags().then(likedTags => {
+      console.log(likedTags); setLikedTags(likedTags); setNormalTags(categories.filter(x => !likedTags.includes(x)));
+    })
+    console.log("liked tags");
+    console.log(likedTags);
+    console.log("other tags");
+    console.log(normalTags);
+  }, [rerender])
 
-  const status = res.status;
-  res = await res.json();
 
-  if (status < 400) {
-    console.log("works");
-    console.log(res);
-  } else {
-    alert(res.message);
-    alert("error stuff");
+  const handleDelete = async (eventid) => {
+    console.log("begin");
+    console.log("event.id: " + eventid);
+    console.log("userInfo.id: " + userInfo.userid);
+
+    let res = await fetch(
+      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removeevent",
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          eventid: eventid,
+          userid: userInfo.userid,
+        }),
+      }
+    );
+
+    const status = res.status;
+    res = await res.json();
+
+    if (status < 400) {
+      console.log("works");
+      console.log(res);
+    } else {
+      alert(res.message);
+      alert("error stuff");
+    }
+
+    setRerender(!rerender);
+    console.log(rerender);
+  };
+
+  const handleTagClick = async (tag) => {
+    if (likedTags.includes(tag)) {
+      let res = await fetch(
+        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removelike",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            tagid: tag,
+            userid: userInfo.userid,
+          }),
+        }
+      );
+
+      const status = res.status;
+      res = await res.json();
+
+      if (status < 400) {
+        console.log("works");
+        console.log(res);
+      } else {
+        alert(res.message);
+        alert("error stuff");
+      }
+
+      setRerender(!rerender);
+      console.log(rerender);
+    }
+    else {
+      let res = await fetch(
+        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addlike",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            tagid: tag,
+            userid: userInfo.userid,
+          }),
+        }
+      );
+
+      const status = res.status;
+      res = await res.json();
+
+      if (status < 400) {
+        console.log("works");
+        console.log(res);
+      } else {
+        alert(res.message);
+        alert("error stuff");
+      }
+
+      setRerender(!rerender);
+      console.log(rerender);
+    }
   }
-
-  setRerender(!rerender);
-  console.log(rerender);
-};
 
   return (
     <div className="App">
@@ -116,7 +217,7 @@ const handleSubmit = async (eventid) => {
         <Link to="/Manager" style={{ textDecoration: 'none' }}><h1 className="orange">My Created Events</h1></Link>
         {events?.map((event) => { }).length === 0 && "You have not created any events."}
         <div className="cards">
-          {events?.map(event => {      
+          {events?.map(event => {
             return (
               <div className="card" key={event.id}>
                 <div>
@@ -129,9 +230,9 @@ const handleSubmit = async (eventid) => {
               </div>
             );
           })}
-          </div>
-            <h1 className="orange">My Added Events</h1>
-            {addedEvents?.map((event) => { }).length === 0 && "You have not added any events."}
+        </div>
+        <h1 className="orange">My Added Events</h1>
+        {addedEvents?.map((event) => { }).length === 0 && "You have not added any events."}
         <div className="cards">
           {addedEvents?.map((event) => {
             return (
@@ -153,7 +254,7 @@ const handleSubmit = async (eventid) => {
                     <Button
                       variant="contained"
                       type="submit"
-                      onClick={() => (handleSubmit(event.id))}
+                      onClick={() => (handleDelete(event.id))}
                       sx={{
                         marginTop: 4,
                         marginLeft: 4,
@@ -169,6 +270,51 @@ const handleSubmit = async (eventid) => {
               </Grid>
             );
           })}
+        </div>
+        <h1 className="orange">Tags</h1>
+        <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10}}>
+        {likedTags?.map((tag) => {
+            return (
+              <Grid container justifyContent="center">
+              <Button
+                variant="contained"
+                type="submit"
+                onClick={() => (handleTagClick(tag))}
+                sx={{
+                  marginTop: 4,
+                  marginLeft: 4,
+                  bgcolor: "#ffbbbb",
+                  color: "#022A68",
+                  fontWeight: "bold",
+                  borderRadius: 3,
+                }}
+              >
+                {tag} ♥
+              </Button>
+            </Grid>
+            )
+        })}
+        {normalTags?.map((tag) => {
+            return (
+              <Grid container justifyContent="center">
+              <Button
+                variant="contained"
+                type="submit"
+                onClick={() => (handleTagClick(tag))}
+                sx={{
+                  marginTop: 4,
+                  marginLeft: 4,
+                  bgcolor: "#ffbbbb",
+                  color: "#022A68",
+                  fontWeight: "bold",
+                  borderRadius: 3,
+                }}
+              >
+                {tag} ♡
+              </Button>
+            </Grid>
+            )
+        })}
         </div>
       </div>
     </div>
