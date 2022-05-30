@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
-import sampleImage from "./logo192.png";
 import { getWithExpiry } from "../../Token";
 import jwt_decode from "jwt-decode";
 import { Navigate, Link } from "react-router-dom";
@@ -205,9 +204,6 @@ const Profile = () => {
     <div className="App">
       <div className="profile-top">
         <div>
-          <img src={sampleImage} alt="sample" />
-        </div>
-        <div>
           <h1 id="profile-name">{userInfo.username}</h1>
           <h3 id="profile-description">{userInfo.email}</h3>
           <br />
@@ -271,22 +267,26 @@ const Profile = () => {
             );
           })}
         </div>
-        <h1 className="orange">Tags</h1>
-        <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10}}>
+        <h1 className="orange">My Favorite Categories</h1>
+        <div className="tags">
         {likedTags?.map((tag) => {
             return (
-              <Grid container justifyContent="center">
+              <Grid container>
               <Button
                 variant="contained"
                 type="submit"
                 onClick={() => (handleTagClick(tag))}
                 sx={{
-                  marginTop: 4,
-                  marginLeft: 4,
-                  bgcolor: "#ffbbbb",
-                  color: "#022A68",
+                  marginTop: 2,
+                  marginLeft: 1,
+                  marginRight: 1,
+                  padding: 2,
+                  bgcolor: "#022A68",
+                  color: "#ffffff",
                   fontWeight: "bold",
                   borderRadius: 3,
+                  maxWidth: 215,
+                  minWidth: 215,
                 }}
               >
                 {tag} ♥
@@ -296,18 +296,22 @@ const Profile = () => {
         })}
         {normalTags?.map((tag) => {
             return (
-              <Grid container justifyContent="center">
+              <Grid container>
               <Button
                 variant="contained"
                 type="submit"
                 onClick={() => (handleTagClick(tag))}
                 sx={{
-                  marginTop: 4,
-                  marginLeft: 4,
-                  bgcolor: "#ffbbbb",
-                  color: "#022A68",
+                  marginTop: 2,
+                  marginLeft: 1,
+                  marginRight: 1,
+                  padding: 2,
+                  bgcolor: "#A5DAD2",
+                  color: "#000000",
                   fontWeight: "bold",
                   borderRadius: 3,
+                  maxWidth: 215,
+                  minWidth: 215,
                 }}
               >
                 {tag} ♡

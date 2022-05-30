@@ -97,3 +97,10 @@ img {
     border-radius: 5px;
     padding: 0.5em;
 }
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+}
