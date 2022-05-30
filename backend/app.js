@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const db = require('./queries');
+const utils = require('./utils');
 const app = express();
 
 // Routes
@@ -13,6 +14,7 @@ const userRouter = require('./routes/user');
 const eventRouter = require('./routes/event');
 const homeRouter = require('./routes/home');
 const searchRouter = require('./routes/search');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -48,6 +50,9 @@ app.use((err, req, res, next) => {
   // send error info in json
   res.status(err.status || 500).json(error);
 });
+
+// Send Emails once per week
+utils.emailLoop();
 
 module.exports = app;
 
