@@ -198,7 +198,19 @@ function authenticateToken(req, res, next) {
   });
 }
 
+async function emailLoop() {
+  setInterval(() => {
+    console.log('Sending Weekly Email Recommendations');
+    db.query('SELECT email FROM users', [], (err, data) => {
+      data.rows.forEach(user => {
+        sendRecommendationEmail(user.email, 'Weekly Recommendation Email');
+      });
+    });
+  }, 7 * 24 * 60 * 60 * 1000);
+}
+
 module.exports = {
   authenticateToken,
-  sendRecommendationEmail
+  sendRecommendationEmail,
+  emailLoop
 }

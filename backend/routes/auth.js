@@ -135,9 +135,9 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/emailtest', (req, res, next) => {
-  utils.sendRecommendationEmail(req.query.email, "Welcome Recommendations");
-  res.status(200).send({message: "good one lmao"});
-});
+// router.get('/emailtest', (req, res, next) => {
+//   utils.sendRecommendationEmail(req.query.email, "Welcome Recommendations");
+//   res.status(200).send({message: "email sent"});
+// });
 
 module.exports = router;
