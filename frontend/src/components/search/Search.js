@@ -11,6 +11,7 @@ export default function Search() {
   const [value, setValue] = useState("");
   const [events, setEvents] = useState([]);
   const [userEvents, setUserEvents] = useState([]);
+  const [createdEvents, setCreatedEvents] = useState([]);
   let userInfo;
   const user = getWithExpiry("user")
   user ? userInfo = jwtDecode(user) : userInfo = null
@@ -20,7 +21,7 @@ export default function Search() {
       setEvents([]);
       return;
     }
-    let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/search?title=" + value, {
+    let res = await fetch("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/search?title=" + value, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -38,7 +39,7 @@ export default function Search() {
       alert("error!");
     }
     if (userInfo !== null) {
-      let res2 = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid, {
+      let res2 = await fetch("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -55,6 +56,23 @@ export default function Search() {
         console.log("error");
         setUserEvents([]);
       }
+        let res3 = await fetch("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" + userInfo.userid, {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + user,
+            },
+            method: "GET",
+          })
+          const new_status = res3.status;
+          res3 = await res3.json();
+          if (new_status < 400) {
+            setCreatedEvents(res3.events);
+          }
+          else {
+            console.log("error");
+            setCreatedEvents([]);
+          }
     }
   }
 
@@ -73,7 +91,7 @@ export default function Search() {
   console.log("userInfo.id: " + userInfo.userid);
 
   let res = await fetch(
-    "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removeevent",
+    "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/removeevent",
     {
       headers: {
         Accept: "application/json",
@@ -107,7 +125,7 @@ export default function Search() {
     console.log("userInfo.id: " + userInfo.userid);
   
     let res = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addevent",
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addevent",
       {
         headers: {
           Accept: "application/json",
@@ -135,10 +153,13 @@ export default function Search() {
   };
 
   const FindEvent = (key) => {
-    if(userEvents.some(event=>event.id===key.event)){
-      return <button onClick={function(){handleDelete(key.event)}}>remove</button>
+    if(createdEvents.some(event=>event.id===key.event)){
+      return <button id="delete-button">my created event</button>
     }
-    return <button onClick={function(){handleAdd(key.event)}}>add</button>;
+    if(userEvents.some(event=>event.id===key.event)){
+      return <button id="delete-button" onClick={function(){handleDelete(key.event)}}>remove</button>
+    }
+    return <button id="delete-button" onClick={function(){handleAdd(key.event)}}>add</button>;
   };
 
   const changeHandler = e => {

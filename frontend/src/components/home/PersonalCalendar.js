@@ -31,7 +31,7 @@ export default class Calendar extends React.Component {
   componentDidMount() {
     (async () => {
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user?userid=" + userInfo.userid,
+        "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user?userid=" + userInfo.userid,
         {
           headers: {
             "Accept": "application/json",
@@ -55,7 +55,7 @@ export default class Calendar extends React.Component {
     })();
       (async () => {
         let res = await fetch(
-          "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
+          "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
           {
             headers: {
               Accept: "application/json",
@@ -163,7 +163,7 @@ const popup = (Event, { type, timeout }, rerender) => {
     if (!userInfo) return;
     if (!userInfo.userid) return;
     let res = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addevent",
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addevent",
       {
         headers: {
           Accept: "application/json",
@@ -189,7 +189,7 @@ const popup = (Event, { type, timeout }, rerender) => {
       alert("error");
     }
     let updatePersonalizedEvents = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
       {
         headers: {
           Accept: "application/json",
@@ -212,7 +212,7 @@ const popup = (Event, { type, timeout }, rerender) => {
     if (!userInfo) return;
     if (!userInfo.userid) return;
     let res = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removeevent",
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/removeevent",
       {
         headers: {
           Accept: "application/json",
@@ -238,7 +238,7 @@ const popup = (Event, { type, timeout }, rerender) => {
       alert("error");
     }
     let updatePersonalizedEvents = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
       {
         headers: {
           Accept: "application/json",

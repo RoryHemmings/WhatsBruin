@@ -3,7 +3,7 @@ body,
 body > div { /* the react root */
   margin: 0;
   padding: 0;
-  height: 70vh;
+  height: 60vh;
   width: 100vw;
 }
 
