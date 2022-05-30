@@ -15,7 +15,7 @@ export default function LocationMap() {
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(southCampus) }}>south campus</button>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(westwood) }}>westwood</button>
       </div>
-      <Map height={600} center={selected} zoom={17} />
+      <Map height={600} width={1300} center={selected} zoom={17}  />
     </div>
 
   )

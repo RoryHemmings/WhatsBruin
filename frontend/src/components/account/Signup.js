@@ -74,7 +74,7 @@ export default function SignUp() { //currently info just goes to console log on 
       password: data.get('password'),
       username: data.get('username'),
     });
-    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/auth/register", {
+    let res = await fetch ("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/auth/register", {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
