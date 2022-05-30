@@ -65,7 +65,7 @@ export default function Login() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    let res = await fetch ("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/auth/login", {
+    let res = await fetch ("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/auth/login", {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -85,6 +85,7 @@ export default function Login() {
       console.log(res.accessToken);
       setWithExpiry("user", res.accessToken, 86400000); //24 hours in milliseconds
       setRerender(!rerender);
+      window.location.reload(false);
       <Navigate to='/Profile'  />
     }
     else {

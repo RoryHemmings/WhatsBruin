@@ -15,7 +15,7 @@ const DeleteEvent = () => {
     let userInfo = jwt_decode(user);
     const getData = async () => {
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user?userid=" +
+        "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" +
           userInfo.userid,
         {
           headers: {
@@ -47,7 +47,7 @@ const DeleteEvent = () => {
     console.log("userInfo.id: " + userInfo.userid);
 
     let res = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/event/delete",
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/event/delete",
       {
         headers: {
           Accept: "application/json",

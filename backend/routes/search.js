@@ -4,14 +4,16 @@ const db = require('../queries');
 const utils = require('../utils');
 
 function getEvents(title) {
+  title = title.toLowerCase();
   return new Promise((resolve, reject) => {
       let keywords = title.split(' ');
-      let query = "SELECT * FROM events WHERE SIMILARITY(title, $1) > 0.3 OR title LIKE $2 ";
+      let query = "SELECT * FROM events WHERE SIMILARITY(LOWER(title), LOWER($1)) > 0.3 OR SIMILARITY(LOWER(organizeruser), LOWER($1)) > 0.8 ";
       for (let i = 0; i < keywords.length; i++) {
         keywords[i] = `%${keywords[i]}%`;
-        query += `OR description LIKE $${i+2} `;
+        query += `OR LOWER(title) LIKE $${i+2} `;
+        query += `OR LOWER(description) LIKE $${i+2} `;
       }
-      query += 'ORDER BY SIMILARITY(title, $1) DESC'; 
+      query += 'ORDER BY SIMILARITY(LOWER(title), LOWER($1)) DESC'; 
 
       db.query(query, [title].concat(keywords), (err, data) => {
         if (err) {
@@ -19,11 +21,7 @@ function getEvents(title) {
           return reject(err);
         }
 
-        if (data.rowCount < 1)
-          return reject({status: 200, message: "no results were found"});
-
-        const events = data.rows;
-        resolve(events);
+        resolve(data.rows);
       });
   });
 }
@@ -36,7 +34,8 @@ async function searchEvents(req, res, next) {
   try {
     const events = await getEvents(title);
     res.status(200).json(events);
-  } catch {
+  } catch (err) {
+    console.log(err);
     next({status: 500, message: 'Database Error'});
   }
 }
