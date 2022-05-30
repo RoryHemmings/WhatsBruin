@@ -11,7 +11,6 @@ const getCalendar = async (req, res) => {
       console.log(err);
       return res.status(500).json({ message: 'database error' });
     }
-    console.log(data.rows);
     if (data.rowCount < 1)
       return res.status(400).json({message: 'no events in this month'});
 

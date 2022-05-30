@@ -30,7 +30,7 @@ const Profile = () => {
       return <Navigate to='/Signup' />
     }
     const getData = async () => {
-      let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" + userInfo.userid, {
+      let res = await fetch("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/createdevents?userid=" + userInfo.userid, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const Profile = () => {
       console.log(events); setEvents(events)
     })
     const getAddedData = async () => {
-      let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid, {
+      let res = await fetch("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ const Profile = () => {
       console.log(addedEvents); setAddedEvents(addedEvents)
     })
     const getTags = async () => {
-      let res = await fetch("http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/tags?userid=" + userInfo.userid, {
+      let res = await fetch("http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/tags?userid=" + userInfo.userid, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const Profile = () => {
     console.log("userInfo.id: " + userInfo.userid);
 
     let res = await fetch(
-      "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removeevent",
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/removeevent",
       {
         headers: {
           Accept: "application/json",
@@ -140,7 +140,7 @@ const Profile = () => {
   const handleTagClick = async (tag) => {
     if (likedTags.includes(tag)) {
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/removelike",
+        "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/removelike",
         {
           headers: {
             Accept: "application/json",
@@ -170,7 +170,7 @@ const Profile = () => {
     }
     else {
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/user/addlike",
+        "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addlike",
         {
           headers: {
             Accept: "application/json",

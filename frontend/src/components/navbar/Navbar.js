@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {Link} from 'react-router-dom';
 import { getWithExpiry } from '../../Token';
+import { Navigate } from 'react-router-dom';
 
 
 const Navbar = () => {
@@ -54,6 +55,7 @@ const Navbar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Toolbar>
+          <Link to='/'>
           <Box
             component="img"
             sx={{
@@ -64,6 +66,7 @@ const Navbar = () => {
             
         >
           </Box>
+          </Link>
           </Toolbar>
 
           <Box sx={{flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -129,11 +132,11 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {/* <Tooltip title="Open settings"> */}
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar src="/broken-image.jpg" />
               </IconButton>
-            </Tooltip>
+            {/* </Tooltip> */}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

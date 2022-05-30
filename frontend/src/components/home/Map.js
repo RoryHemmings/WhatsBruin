@@ -18,7 +18,7 @@ export default function LocationMap() {
         <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(westwood); setZoom(17) }}>westwood</button>
         <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(la); setZoom(12) }}>los angeles</button>
       </div>
-      <Map height={600} center={selected} zoom={zoom} />
+      <Map height={600} width={1300} center={selected} zoom={zoom} />
     </div>
 
   )

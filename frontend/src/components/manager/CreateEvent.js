@@ -122,7 +122,7 @@ export default function CreateEvent() {
       ][dayNum];
 
       let res = await fetch(
-        "http://ec2-50-18-101-113.us-west-1.compute.amazonaws.com:3000/event/create",
+        "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/event/create",
         {
           headers: {
             Accept: "application/json",
