@@ -7,12 +7,13 @@ function getEvents(title) {
   title = title.toLowerCase();
   return new Promise((resolve, reject) => {
       let keywords = title.split(' ');
-      let query = "SELECT * FROM events WHERE SIMILARITY(title, $1) > 0.3 OR title LIKE $2 ";
+      let query = "SELECT * FROM events WHERE SIMILARITY(LOWER(title), LOWER($1)) > 0.3 OR SIMILARITY(LOWER(organizeruser), LOWER($1)) > 0.8 ";
       for (let i = 0; i < keywords.length; i++) {
         keywords[i] = `%${keywords[i]}%`;
-        query += `OR description LIKE $${i+2} `;
+        query += `OR LOWER(title) LIKE $${i+2} `;
+        query += `OR LOWER(description) LIKE $${i+2} `;
       }
-      query += 'ORDER BY SIMILARITY(title, $1) DESC'; 
+      query += 'ORDER BY SIMILARITY(LOWER(title), LOWER($1)) DESC'; 
 
       db.query(query, [title].concat(keywords), (err, data) => {
         if (err) {
