@@ -11,11 +11,11 @@ if(user){
 export default function Home(){
   return (
     <div className="App">
-      <p style={{color: "#F68C3E", fontSize: 40}}>{userInfo.username}'s Calendar</p>
+      <p style={{color: "#F68C3E", fontSize: 40 , paddingTop:20}}>{userInfo.username}'s Calendar</p>
       <div>
         <PersonalCalendar/>
         <br/>
-        <p style={{color: "#F68C3E", fontSize: 40}}>reference map {"<3"} </p>
+        <p style={{color: "#F68C3E", fontSize: 40}}>♡ reference map ♡</p>
         <LocationMap />
       </div>
     </div>
