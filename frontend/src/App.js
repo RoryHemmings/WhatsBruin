@@ -12,7 +12,7 @@ import Signup from './components/account/Signup';
 import Login from './components/account/Login';
 import Logout from './components/account/Logout';
 import Search from './components/search/Search';
-
+import Landing from './components/landing/Landing';
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
       <Navbar/>
       <Routes>
       <Route path="/" element={<Calendar/>}></Route>
+        <Route path="/Landing" element={<Landing/>}></Route> 
         <Route path="/Calendar" element={<Home/>}></Route>
         <Route path="/Manager" element={<Manager/>}></Route>
         <Route path="/Profile" element={<Profile/>}></Route>
@@ -29,7 +30,6 @@ function App() {
         <Route path="/Search" element={<Search/>}></Route>
       </Routes>
     </div>
-
   );
 }
 
