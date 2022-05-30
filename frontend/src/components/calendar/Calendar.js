@@ -98,6 +98,10 @@ export default class Calendar extends React.Component {
    const { currentEvents, categories, locations, dates, times, month1, month3 } = this.state;
    //console.log(month1);
    var currentEVENTS = currentEvents?.concat(month1!==undefined ? month1 : [], month3!==undefined ? month3 : []);
+   currentEVENTS = currentEVENTS?.filter((value, index, self) =>
+   index === self.findIndex((t) => (
+     t.id === value.id
+   )));
    var eventList = [];
    eventList = currentEVENTS?.map(eventItem => {
      return {

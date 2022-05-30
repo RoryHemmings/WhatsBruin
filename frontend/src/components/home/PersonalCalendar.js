@@ -24,10 +24,8 @@ export default class Calendar extends React.Component {
     this.state = {
       needPass: true,
       currentEvents: [],
-      rerender: false,
     }
   }
-
   componentDidMount() {
     (async () => {
       let res = await fetch(
@@ -77,13 +75,13 @@ export default class Calendar extends React.Component {
   }
 
   render() {
-    const { currentEvents } = this.state;
+    let { currentEvents } = this.state;
     var eventList = currentEvents;
-    eventList = eventList.filter((value, index, self) =>
+    eventList = Array.isArray(eventList) ? eventList?.filter((value, index, self) =>
       index === self.findIndex((t) => (
         t.id === value.id
       ))
-    )
+    ) : [];
     eventList = eventList?.map(eventItem => {
       return {
         id: eventItem.id,
@@ -125,11 +123,11 @@ export default class Calendar extends React.Component {
 
     );
   }
-  rerender = () => {
-    this.setState({ rerender: !this.state.rerender });
+  rerenderCurrent = (events) => {
+    this.setState({ currentEvents: events });
   }
   handleEventClick = (clickInfo) => {
-    popup(clickInfo.event, { type: "info", timeout: 1000 }, this.rerender);
+    popup(clickInfo.event, { type: "info", timeout: 1000 }, this.rerenderCurrent);
   }
 }
 //end of calendar class
@@ -148,7 +146,7 @@ function renderEventContent(eventInfo) {
 //popup
 
 const node = document.createElement("div");
-const popup = (Event, { type, timeout }, rerender) => {
+const popup = (Event, { type, timeout }, rerenderCurrent) => {
   document.body.appendChild(node);
   var title = Event.title;
   var description = Event.extendedProps.description;
@@ -158,55 +156,6 @@ const popup = (Event, { type, timeout }, rerender) => {
   let smallOpen = true;
   function checkAdded() {
     return personalizedEvents.includes(Event.id);
-  }
-  async function addevent() {
-    if (!userInfo) return;
-    if (!userInfo.userid) return;
-    let res = await fetch(
-      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addevent",
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          eventid: Event.id,
-          userid: String(userInfo.userid),
-        }),
-      }
-    );
-
-    const status = res.status;
-    res = await res.json();
-
-    // TODO: remove
-    if (status === 201) {
-      console.log("works");
-      console.log(res);
-    } else {
-      alert(res.message);
-      alert("error");
-    }
-    let updatePersonalizedEvents = await fetch(
-      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user/addedevents?userid=" + userInfo.userid,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      }
-    );
-    updatePersonalizedEvents = await updatePersonalizedEvents.json();
-
-    personalizedEvents = updatePersonalizedEvents.events?.map((event) => { return event.id });
-    rerender();
-    smallOpen = false;
-    setTimeout(() => {
-      ReactDOM.render(<PopupContent />, node);
-    }, 150);
-
   }
   async function removeevent() {
     if (!userInfo) return;
@@ -250,7 +199,19 @@ const popup = (Event, { type, timeout }, rerender) => {
     updatePersonalizedEvents = await updatePersonalizedEvents.json();
 
     personalizedEvents = updatePersonalizedEvents.events.map((event) => { return event.id });
-    rerender();
+    let updateCurrentEvents = await fetch(
+      "http://ec2-52-53-130-125.us-west-1.compute.amazonaws.com:3000/user?userid=" + userInfo.userid,
+      {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + user
+        },
+        method: "GET",
+      }
+    );
+    updateCurrentEvents = await updateCurrentEvents.json();
+    rerenderCurrent(updateCurrentEvents.events);
     smallOpen = false;
     setTimeout(() => {
       ReactDOM.render(<PopupContent />, node);
@@ -303,7 +264,7 @@ const popup = (Event, { type, timeout }, rerender) => {
                 (
                   !checkAdded() ? (
                     <>
-                      <button className="popup-add-button" onClick={addevent}>add event to my calendar</button>
+                      <p style={{textAlign: "right"}}>my created event</p>
                     </>
                   ) : (
                     <button className="popup-remove-button" onClick={removeevent}>remove event from my calendar</button>
