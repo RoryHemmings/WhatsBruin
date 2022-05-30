@@ -113,7 +113,7 @@ const getUserTags = async (request, response) => {
     if (results.rowCount < 1) {
       return response.status(400).json({ message: 'no user with that id exists' });
     }
-    response.status(200).json({ likes: results[0].rows });
+    response.status(200).json(results.rows[0]);
   });
 }
 
