@@ -103,14 +103,14 @@ passport.use(new LocalStrategy({
 
         /* Make sure query was sucessful */
         if (err) return callback(err);
-        if (data.rows.length < 1) return callback(null, null, { message: `User with that email does not exist` });
+        if (data.rows.length < 1) return callback(null, null, { status: 401, message: `User with that email does not exist` });
 
         const user = data.rows[0];
         /* Confirm that password is correct */
         if (await bcrypt.compare(password, user.passwordhash)) {
           return callback(null, user);  // success
         } else {
-          return callback(null, null, { message: 'Incorrect password' })
+          return callback(null, null, { status: 401, message: 'Incorrect password' })
         }
       });
   }));
@@ -122,7 +122,7 @@ router.post('/login', (req, res, next) => {
       return next({ status: 500, message: "authentication error" });
     }
 
-    if (!user) return next({ status: 401, message: message });
+    if (!user) return next(message);
 
     const userInfo = {
       userid: user.id,
