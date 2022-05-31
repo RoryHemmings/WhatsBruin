@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import {Link} from 'react-router-dom';
 import { getWithExpiry } from '../../Token';
 import { Navigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode'
 
 
 const Navbar = () => {
@@ -31,7 +32,6 @@ const Navbar = () => {
     pages = ['Calendar', 'Search'];
   }
 
-  
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -49,6 +49,23 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  let profileComponent 
+  const userInfo = getWithExpiry("user") ? jwt_decode(getWithExpiry("user")) : null;
+  if (userInfo == null) { 
+    profileComponent = (
+      <Button onClick={handleOpenUserMenu} sx={{ }}>
+        <p id="profile-text" style={{textDecoration: "none", color:"#172c96"}}>Log In</p>
+      </Button>
+    );
+  } 
+  else { 
+    profileComponent = (
+      <Button onClick={handleOpenUserMenu} sx={{ }}>
+        <p id="profile-text" style={{textDecoration: "none", color:"#172c96"}}>{userInfo.username}</p>
+      </Button>
+    );
+  }
 
   return (
     <AppBar sx={{backgroundColor: "#ffffff",}}position="static">
@@ -133,9 +150,9 @@ const Navbar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             {/* <Tooltip title="Open settings"> */}
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src="/broken-image.jpg" />
-              </IconButton>
+              {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}> */}
+                { profileComponent }
+              {/* </IconButton> */}
             {/* </Tooltip> */}
             <Menu
               sx={{ mt: '45px' }}
