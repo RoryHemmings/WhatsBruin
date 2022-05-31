@@ -24,7 +24,7 @@ cd frontend
 ```
 2. Install node dependencies:
 ```
-npm install
+npm install --force
 ```
 3. Run the app!
 ```
@@ -32,7 +32,20 @@ npm start
 ```
 
 ### Backend Setup
-// TODO
+To run our backend application locally, complete the following steps in you preferred IDE (we used Visual Studio Code!)
+Having cloned the git repository into the directory WhatsBruin,
+1.
+```
+cd backend
+```
+2. Install node dependencies: 
+```
+npm install
+```
+3. Run the app!
+```
+npm start
+```
 
 ## Authors
 Created by Amanda Wang, Caolinn Hukill, Juliet Zhang, Rory Hemmings, and Salma Alandary for UCLA's CS 35L course taught by Professor Paul Eggert in Spring 2022.
