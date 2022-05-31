@@ -19,9 +19,9 @@ function App() {
     <div className="App">
       <Navbar/>
       <Routes>
-      <Route path="/" element={<Calendar/>}></Route>
-        <Route path="/Landing" element={<Landing/>}></Route> 
-        <Route path="/Calendar" element={<Home/>}></Route>
+      <Route path="/" element={<Landing/>}></Route>
+        <Route path="/Calendar" element={<Calendar/>}></Route> 
+        <Route path="/MyCalendar" element={<Home/>}></Route>
         <Route path="/Manager" element={<Manager/>}></Route>
         <Route path="/Profile" element={<Profile/>}></Route>
         <Route path="/Signup" element={<Signup/>}></Route>

@@ -287,6 +287,7 @@ const Profile = () => {
                   color: "#022A68",
                   fontWeight: "bold",
                   borderRadius: 3,
+                  marginBottom:4,
                 }}
               >
                 {tag} ♥
@@ -308,6 +309,7 @@ const Profile = () => {
                   color: "#022A68",
                   fontWeight: "bold",
                   borderRadius: 3,
+                  marginBottom:4,
                 }}
               >
                 {tag} ♡

@@ -8,14 +8,14 @@ export default function LocationMap() {
   const westwood = [34.0612, -118.444];
   const [selected, setSelected] = useState(hill);
   return (
-    <div>
-      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10}}>
+    <div style={{paddingBottom:20}}>
+      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10, paddingBottom:10}}>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(hill) }}>the hill</button>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(northCampus) }}>north campus</button>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(southCampus) }}>south campus</button>
         <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(westwood) }}>westwood</button>
       </div>
-      <Map height={600} width={1300} center={selected} zoom={17}  />
+      <Map height={600} width={1300} center={selected} zoom={17}/>
     </div>
 
   )
