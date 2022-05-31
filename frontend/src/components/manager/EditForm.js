@@ -178,7 +178,7 @@ export default function EditForm(props) {
   ];
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit}>
+    <Box class="edit-form" component="form" noValidate onSubmit={handleSubmit}>
       <div>
         <TextField
           id="eventName"

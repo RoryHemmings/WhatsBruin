@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 .App {
   text-align: center;
 }
@@ -48,11 +52,19 @@ h1 {
   padding: 0.5rem;
 }
 
+.popup-add-button:hover {
+  background-color: #ecc01f;
+}
+
 .popup-remove-button {
   background-color: #F68C3E; 
   color: white;
   border-radius: 5px;
   padding: 0.5rem;
+}
+
+.popup-remove-button:hover {
+  background-color: #f87415;
 }
 
 .map-button {
@@ -63,5 +75,9 @@ h1 {
 }
 
 .map-button:hover {
-  background-color: #FCBA63; 
+  background-color: #f87415; 
+}
+
+.edit-form {
+  margin-top: 30px;
 }
