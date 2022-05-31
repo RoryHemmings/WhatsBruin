@@ -287,6 +287,7 @@ const Profile = () => {
                   borderRadius: 3,
                   maxWidth: 215,
                   minWidth: 215,
+                  marginBottom: 4,
                 }}
               >
                 {tag} ♥
@@ -312,6 +313,7 @@ const Profile = () => {
                   borderRadius: 3,
                   maxWidth: 215,
                   minWidth: 215,
+                  marginBottom: 4,
                 }}
               >
                 {tag} ♡
