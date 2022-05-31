@@ -92,12 +92,13 @@ export default function MultipleSelectChip({updateParent}) {
    const {
      target: { value },
    } = event;
- 
    setDateFilter(
      // On autofill we get a stringified value.
      typeof value === "string" ? value.split(",") : value
    );
-   updateParent({dates: value});
+   //remove emoji
+   let tempDate = value?.map((dateString) => dateString.substring(4));
+   updateParent({dates: tempDate});
  };
  
  const handleTimeChange = (event) => {
