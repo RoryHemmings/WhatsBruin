@@ -113,7 +113,7 @@ export default function MultipleSelectChip({updateParent}) {
  };
  
  return (
-   <div>
+   <div style={{paddingBottom:10}}>
      <FormControl sx={{ m: 1, width: 200 }} size="small">
        <InputLabel id="demo-multiple-chip-label" sx={{ bgcolor:"white" }}>Category</InputLabel>
        <Select

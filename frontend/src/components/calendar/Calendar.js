@@ -156,7 +156,7 @@ export default class Calendar extends React.Component {
  
    return (
  
-     <div className="App">
+     <div className="App" style={{paddingBottom:20, paddingTop:20}}>
  
        <Filter updateParent={this.update}/>
        <FullCalendar

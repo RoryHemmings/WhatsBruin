@@ -24,11 +24,11 @@ const Navbar = () => {
   const auth_settings = ['Profile', 'Logout'];
   if(userStruct !== null){
     settings = auth_settings;
-    pages = ['Calendar', 'Search', 'Manager'];
+    pages = ['Calendar', 'MyCalendar', 'Search', 'Manager'];
   }
   else {
     settings = unauth_settings;
-    pages = ['Search'];
+    pages = ['Calendar', 'Search'];
   }
 
   
@@ -51,7 +51,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar sx={{backgroundColor: "#ffffff"}}position="static">
+    <AppBar sx={{backgroundColor: "#ffffff",}}position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Toolbar>
@@ -99,7 +99,7 @@ const Navbar = () => {
               }}
             >
               <MenuItem key={'Home'} onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">
+                <Typography textAlign="center" textTransform={"lowercase"}>
                 <Link style={{textDecoration: "none", color:"#172c96"}}to={`/`}>{'Home'}</Link>    
                 </Typography>
               </MenuItem>

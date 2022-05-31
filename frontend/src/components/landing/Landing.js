@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import "./Landing.css";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   return (
@@ -16,7 +17,8 @@ export default function Landing() {
             Get started by browsing<br/>UCLA events without signing in:
           </p>
           <div className="center">
-            <button class="landing-button">Public Calendar</button>
+            <Link to="/">
+            <button class="landing-button">Public Calendar</button></Link>
           </div>
         </div>
         <div>
@@ -24,8 +26,10 @@ export default function Landing() {
             Or use WhatsBruin to publicize your events<br/>and save others you're interested in!
           </p>
           <div className="center">
-            <button class="landing-button">Sign Up</button>
-            <button class="landing-button">Log In</button>
+            <Link to="/Signup">
+            <button class="landing-button">Sign Up</button></Link>
+            <Link to="/Login">
+            <button class="landing-button">Log In</button></Link>
           </div>
         </div>
       </div>

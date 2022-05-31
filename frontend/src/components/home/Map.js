@@ -10,13 +10,12 @@ export default function LocationMap() {
   const [selected, setSelected] = useState(hill);
   const [zoom, setZoom] = useState(17);
   return (
-    <div>
-      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10}}>
-        <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(hill); setZoom(17) }}>the hill</button>
-        <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(northCampus); setZoom(17) }}>north campus</button>
-        <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(southCampus); setZoom(17) }}>south campus</button>
-        <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(westwood); setZoom(17) }}>westwood</button>
-        <button className="map-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(la); setZoom(12) }}>los angeles</button>
+    <div style={{paddingBottom:20}}>
+      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin:10, paddingBottom:10}}>
+        <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(hill) }}>the hill</button>
+        <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(northCampus) }}>north campus</button>
+        <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(southCampus) }}>south campus</button>
+        <button className="popup-remove-button" style={{paddingLeft: 20, paddingRight: 20}} onClick={() => { setSelected(westwood) }}>westwood</button>
       </div>
       <Map height={600} width={1300} center={selected} zoom={zoom} />
     </div>
