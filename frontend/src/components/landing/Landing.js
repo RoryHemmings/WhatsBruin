@@ -17,7 +17,7 @@ export default function Landing() {
             Get started by browsing<br/>UCLA events without signing in:
           </p>
           <div className="center">
-            <Link to="/">
+            <Link to="/Calendar">
             <button class="landing-button">Public Calendar</button></Link>
           </div>
         </div>
