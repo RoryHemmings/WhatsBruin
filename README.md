@@ -54,7 +54,7 @@ npm start
 ![Search](https://user-images.githubusercontent.com/65837446/171301369-b11bd074-1c01-4e7e-9d17-c14085b2a331.gif)
 2. Users can save public events onto their personalized private calendars. <img width="600" alt="Add Event" src="https://user-images.githubusercontent.com/65837446/171301782-e21427b2-356e-446b-a875-4698d8966c47.png">
 3. Users can explore events created by a specific organization. <img width="600" alt="Organizer Search" src="https://user-images.githubusercontent.com/65837446/171302272-cf684ff8-b182-4633-8596-ec95b62ac6bc.png">
-4. 4. Users can receive weekly emails with event recommendations based on their interests. <img width="600" alt="Email" src="https://user-images.githubusercontent.com/65837446/171309728-1970c148-951d-4c16-9c5e-1190078351c1.png">
+4. Users can receive weekly emails with event recommendations based on their interests. <img width="600" alt="Email" src="https://user-images.githubusercontent.com/65837446/171309728-1970c148-951d-4c16-9c5e-1190078351c1.png">
 
 
 ## Authors
