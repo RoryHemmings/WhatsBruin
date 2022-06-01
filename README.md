@@ -1,7 +1,9 @@
-# WhatsBruin
+# [WhatsBruin](http://whatsbruin.tech/)
 _A personalized event calendar for UCLA students._
 
 Sports games, club meetings, activities on the Hill—currently, there is no truly centralized place where students can view all upcoming events that match their interests. But _WhatsBruin_ solves this problem by providing students with a way to explore, filter, and save events they're interested in, allowing them to truly focus on enjoying the college experience!
+
+Try it out at: http://whatsbruin.tech/
 
 ![Landing](https://user-images.githubusercontent.com/65837446/171300348-761f0adc-0731-49af-9085-f803275fd99f.gif)
 
