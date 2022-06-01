@@ -18,7 +18,7 @@ export default function Landing() {
           </p>
           <div className="center">
             <Link to="/Calendar">
-            <button class="landing-button">Public Calendar</button></Link>
+            <button className="landing-button">Public Calendar</button></Link>
           </div>
         </div>
         <div>
@@ -27,9 +27,9 @@ export default function Landing() {
           </p>
           <div className="center">
             <Link to="/Signup">
-            <button class="landing-button">Sign Up</button></Link>
+            <button className="landing-button">Sign Up</button></Link>
             <Link to="/Login">
-            <button class="landing-button">Log In</button></Link>
+            <button className="landing-button">Log In</button></Link>
           </div>
         </div>
       </div>
