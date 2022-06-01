@@ -59,3 +59,6 @@ npm start
 
 ## Authors
 Created by Amanda Wang, Caolinn Hukill, Juliet Zhang, Rory Hemmings, and Salma Alandary for UCLA's CS 35L course taught by Professor Paul Eggert in Spring 2022.
+
+## Package Credits
+Material UI, Pigeon Maps, FullCalendar, ReactJS Popup, JWT decode, React, Dotenv, Bcrypt, Passport, UUID, Nodemailer, Express, NodeJS, PostgreSQL
